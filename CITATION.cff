@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: >-
+  If you use this repository, please also cite the two main reference papers
+  whose methodology was adapted (see the references section).
+title: "Indonesia CCS Screening: adaptation of regional CO2 storage screening methodology for priority CCS basins in Indonesia"
+type: software
+license: MIT
+keywords:
+  - carbon capture and storage
+  - CCS
+  - CO2 storage
+  - Indonesia
+  - saline aquifer
+  - geological screening
+references:
+  - type: article
+    title: "Regional screening of saline aquifers in the Malay Basin for CO2 storage"
+    authors:
+      - family-names: "de Jonge-Anderson"
+        given-names: "Iain"
+    journal: "International Journal of Greenhouse Gas Control"
+    volume: 143
+    year: 2025
+    doi: "10.1016/j.ijggc.2025.104347"
+  - type: article
+    title: "Geological CO2 storage assessment in emerging CCS regions: Review of sequestration potential, policy development, and socio-economic factors in Poland"
+    authors:
+      - family-names: "Nooraiepour"
+        given-names: "Mohammad"
+    journal: "International Journal of Greenhouse Gas Control"
+    volume: 148
+    year: 2025
+    doi: "10.1016/j.ijggc.2025.104524"

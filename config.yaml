@@ -1,0 +1,85 @@
+# =============================================================================
+# config.yaml — Central parameters for Indonesia CCS Screening
+# =============================================================================
+# All figures here have sources/rationales recorded in the comments.
+# Change values here, not inside the script, so that sensitivity analysis
+# (see notebooks/02_sensitivity_analysis.ipynb) remains reproducible.
+#
+# Primary references:
+#   [MB]  de Jonge-Anderson et al. (2025) - Malay Basin screening, IJGGC 143
+#   [PL]  Nooraiepour et al. (2025) - Poland emerging-region review, IJGGC 148
+# =============================================================================
+
+project:
+  name: "Indonesia CCS Screening"
+  tier1_scope: "National multi-basin theoretical screening (target SRL 1)"
+  tier2_target_basin: "Sunda-Asri Basin (offshore West Java)"
+  tier2_secondary_basins: ["South Sumatra Basin", "Bintuni Basin"]
+  status: "prototype / placeholder data — see docs/data_provenance.md"
+
+# -----------------------------------------------------------------------------
+# Data Pipeline Paths
+# -----------------------------------------------------------------------------
+paths:
+  sample:
+    basins: "data/external/sample_basins_indonesia.csv"
+    emitters: "data/external/sample_emitters_indonesia.csv"
+  real:
+    basins_processed: "data/processed/basins_processed.csv"
+    emitters: "data/raw/indonesia_emitters_riil.csv"
+    grid_gebco: "data/raw/gebco_2026_n-4.0_s-6.0_w105.5_e108.0.nc"
+    grid_globsed: "data/raw/GlobSed-v3.nc"
+    heat_flow_db: "data/raw/IHFC_2024_GHFDB_v.2026.03.txt"
+
+# -----------------------------------------------------------------------------
+# Optimal zone cut-offs (subsurface screening) — default values mimic [MB] §4.5.1
+# -----------------------------------------------------------------------------
+screening_cutoffs:
+  optimal:
+    porosity_min_percent: 10          # [MB]: in line with Callas et al. (2024)
+    co2_density_min_kgm3: 300         # [MB]: lower limit for "sufficiently dense" CO2 phase
+    fault_buffer_km: 2.0              # [MB]: setback from Callas et al. (2024), Gulf of Mexico
+  sub_optimal:
+    porosity_min_percent: 6           # [MB]: ~10 mD permeability
+    co2_density_min_kgm3: 100
+    fault_buffer_km: 0.5
+  min_connected_area_km2: 100         # [MB]: proxy for 1 CCS license/project area
+
+# -----------------------------------------------------------------------------
+# Thermodynamics — DEFAULT is still a global proxy, NOT yet calibrated to
+# Indonesian data. Must be updated once Global Heat Flow DB / local points
+# are available. See docs/methodology.md §"Limitations".
+# -----------------------------------------------------------------------------
+thermodynamics:
+  seabed_temperature_C: 26            # tropical > 24 C in [MB]; PLACEHOLDER
+  hydrostatic_gradient_MPa_per_km: 10 # [MB] & commonly used globally
+  overpressure_gradient_MPa_per_km: 20 # [MB]: conservative observed max gradient
+  geothermal_gradient_C_per_km_default: 30  # IHFC range/[PL]: 25-35 C/km, PLACEHOLDER
+
+# -----------------------------------------------------------------------------
+# Volumetric capacity equation (Goodman et al. 2011), used by [MB] & [PL]
+# M_CO2 = A * h * NTG * phi * (1 - Swirr) * E * rho_CO2
+# -----------------------------------------------------------------------------
+capacity_equation:
+  swirr_mean: 0.27                    # [MB]: de Jonge-Anderson et al. 2024a literature
+  swirr_std: 0.05
+  efficiency_factor_percent_mean: 2.0 # [MB]/[PL]: E for saline aquifer (1-2%)
+  efficiency_factor_percent_std: 0.5
+  monte_carlo_iterations: 1000        # [MB]
+
+# -----------------------------------------------------------------------------
+# DBSCAN clustering for optimal connected zones ([MB] §4.5.1)
+# -----------------------------------------------------------------------------
+clustering:
+  eps_grid_cells: 100                 # neighbourhood radius (in grid units, not meters)
+  min_samples: 5
+
+# -----------------------------------------------------------------------------
+# Storage Readiness Level targets & justification ([PL] §3.2)
+# -----------------------------------------------------------------------------
+storage_readiness:
+  tier1_target_srl: 1   # "first-pass, country/basin-scale assessment"
+  tier2_target_srl: 2   # "site systematically mapped, theoretical capacity"
+  note: >
+    SRL 3+ requires proprietary well/pressure data that is not publicly 
+    available for most Indonesian basins at the time this project was created.

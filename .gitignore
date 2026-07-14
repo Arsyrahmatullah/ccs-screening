@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Block real data visualization results to prevent them from leaking to GitHub
+figures/real/
+
+# Block raw data folders
+data/raw/
+data/processed/
+
+# DO NOT block the external folder because it contains sample data
+!data/external/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Jupyter
+*.ipynb_checkpoints
