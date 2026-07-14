@@ -1,0 +1,5 @@
+# Beritahu GitHub untuk mengabaikan file HTML di folder figures dari statistik bahasa
+figures/**/*.html linguist-detectable=false
+
+# Opsional: Jika ingin file HTML tersebut dianggap sebagai dokumentasi saja
+# figures/**/*.html linguist-documentation=true
