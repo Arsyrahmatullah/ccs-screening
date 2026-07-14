@@ -12,7 +12,9 @@ figures/real/
 # Block raw data folders
 data/raw/
 data/processed/
-
+# Temporary private outputs for Tier 2 Sunda-Asri
+figures/*.png
+data/processed/sunda_asri_capacity_results.csv
 # DO NOT block the external folder because it contains sample data
 !data/external/
 
