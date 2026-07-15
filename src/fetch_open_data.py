@@ -167,6 +167,40 @@ def generate_sample_emitters(seed: int = 42, n: int = 25) -> pd.DataFrame:
     return df
 
 
+def generate_sample_sunda_asri_boundary() -> pd.DataFrame:
+    """
+    ILLUSTRATIVE polygon boundary for the Sunda-Asri Basin (West Java Sea /
+    Sunda Strait area), hand-drawn as a rough placeholder — NOT a digitization
+    of an official Badan Geologi map sheet. Used purely so the Tier 2 notebook
+    always has a boundary to run against; replace with
+    data/processed/sunda_asri_boundary_digitized.csv once QGIS digitization
+    from geology.esdm.go.id/geomigas is complete (see docs/data_provenance.md).
+    Coordinates order: closed ring (first point repeated at the end).
+    """
+    vertices = [
+        (105.7, -4.3), (106.3, -4.1), (107.0, -4.2), (107.6, -4.5),
+        (107.8, -5.0), (107.5, -5.6), (106.8, -5.8), (106.1, -5.6),
+        (105.6, -5.1), (105.7, -4.3),
+    ]
+    return pd.DataFrame(vertices, columns=["lon", "lat"])
+
+
+def generate_sample_sunda_asri_faults() -> pd.DataFrame:
+    """
+    ILLUSTRATIVE fault traces within the Sunda-Asri Basin boundary — hand-drawn
+    placeholders representing plausible NW-SE / N-S rift-related fault trends
+    (consistent with the regional Sundaland extensional setting described in
+    [MB] §2), NOT digitized from seismic or official structural maps.
+    Each fault has a `fault_id` so multiple line segments can be grouped into
+    one fault trace.
+    """
+    faults = (
+        [(105.9, -4.4, 1), (106.4, -4.9, 1), (106.9, -5.4, 1)] +
+        [(107.2, -4.4, 2), (107.4, -5.0, 2), (107.1, -5.5, 2)]
+    )
+    return pd.DataFrame(faults, columns=["lon", "lat", "fault_id"])
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mode", choices=["real", "sample"], default="sample")
@@ -181,10 +215,19 @@ def main() -> None:
 
     basins = generate_sample_basins()
     emitters = generate_sample_emitters()
+    boundary = generate_sample_sunda_asri_boundary()
+    faults = generate_sample_sunda_asri_faults()
+
     basins.to_csv(EXTERNAL_DIR / "sample_basins_indonesia.csv", index=False)
     emitters.to_csv(EXTERNAL_DIR / "sample_emitters_indonesia.csv", index=False)
-    print(f"Sample data written to:\n  {EXTERNAL_DIR / 'sample_basins_indonesia.csv'}"
-          f"\n  {EXTERNAL_DIR / 'sample_emitters_indonesia.csv'}")
+    boundary.to_csv(EXTERNAL_DIR / "sunda_asri_boundary_illustrative.csv", index=False)
+    faults.to_csv(EXTERNAL_DIR / "sunda_asri_faults_illustrative.csv", index=False)
+
+    print(f"Sample data written to:\n"
+          f"  {EXTERNAL_DIR / 'sample_basins_indonesia.csv'}\n"
+          f"  {EXTERNAL_DIR / 'sample_emitters_indonesia.csv'}\n"
+          f"  {EXTERNAL_DIR / 'sunda_asri_boundary_illustrative.csv'}\n"
+          f"  {EXTERNAL_DIR / 'sunda_asri_faults_illustrative.csv'}")
 
 
 if __name__ == "__main__":

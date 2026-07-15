@@ -24,12 +24,16 @@ paths:
   sample:
     basins: "data/external/sample_basins_indonesia.csv"
     emitters: "data/external/sample_emitters_indonesia.csv"
+    sunda_asri_boundary: "data/external/sunda_asri_boundary_illustrative.csv"
+    sunda_asri_faults: "data/external/sunda_asri_faults_illustrative.csv"
   real:
     basins_processed: "data/processed/basins_processed.csv"
-    emitters: "data/raw/indonesia_emitters_riil.csv"
+    emitters: "data/raw/indonesia_emitters_real.csv"
     grid_gebco: "data/raw/gebco_2026_n-4.0_s-6.0_w105.5_e108.0.nc"
     grid_globsed: "data/raw/GlobSed-v3.nc"
     heat_flow_db: "data/raw/IHFC_2024_GHFDB_v.2026.03.txt"
+    sunda_asri_boundary: "data/processed/sunda_asri_boundary_digitized.csv"
+    sunda_asri_faults: "data/processed/sunda_asri_faults_digitized.csv"
 
 # -----------------------------------------------------------------------------
 # Optimal zone cut-offs (subsurface screening) — default values mimic [MB] §4.5.1
@@ -71,8 +75,23 @@ capacity_equation:
 # DBSCAN clustering for optimal connected zones ([MB] §4.5.1)
 # -----------------------------------------------------------------------------
 clustering:
-  eps_grid_cells: 100                 # neighbourhood radius (in grid units, not meters)
+  eps_grid_cells: 100                 # neighbourhood radius for POINT-CLOUD data (src/optimal_zone_screening.py)
+  eps_raster_pixels: 2                # neighbourhood radius for RASTER/grid data (Tier 2 notebook, adjacent-pixel connectivity)
   min_samples: 5
+
+# -----------------------------------------------------------------------------
+# Tier 2 reservoir proxies — Sunda-Asri Basin, SRL 1-2
+# Used until real well-derived NTG/porosity/thickness data becomes available.
+# Porosity-depth trend follows the exponential form used in [MB] §4.3
+# (after Sclater & Christie, 1980): phi(z) = phi_surface * exp(-decay * z)
+# -----------------------------------------------------------------------------
+tier2_reservoir_proxy:
+  thickness_m_mean: 80.0
+  thickness_m_std: 30.0
+  ntg_mean: 0.35
+  ntg_std: 0.12
+  porosity_surface_fraction: 0.45     # [MB]: assumed surface porosity
+  porosity_depth_decay_per_km: 0.35   # PLACEHOLDER, calibrate once local core/log data available
 
 # -----------------------------------------------------------------------------
 # Storage Readiness Level targets & justification ([PL] §3.2)

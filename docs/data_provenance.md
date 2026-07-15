@@ -21,6 +21,18 @@ Log all data sources planned/used by this project, their status, and the license
 | Global Oil and Gas Plant Tracker | CO2 emission source (refineries/processing) | Global Energy Monitor | Free, mandatory citation | 📋 |
 | `sample_basins_indonesia.csv` | Tier 1 demo notebook | Internal creation (`src/fetch_open_data.py --mode sample`) | N/A — **not actual geological data** | ✅ (placeholder) |
 | `sample_emitters_indonesia.csv` | Tier 1 demo notebook | Internal creation, synthetic around publicly known industrial clusters | N/A — **not actual emission data** | ✅ (placeholder) |
+| `sunda_asri_boundary_illustrative.csv` | Tier 2 fallback basin polygon | Internal creation, hand-drawn (`src/fetch_open_data.py --mode sample`) — **NOT digitized from an official map** | N/A — placeholder | ✅ (fallback, always available) |
+| `sunda_asri_faults_illustrative.csv` | Tier 2 fallback fault traces | Internal creation, hand-drawn — **NOT digitized from seismic/structural maps** | N/A — placeholder | ✅ (fallback, always available) |
+| `sunda_asri_boundary_digitized.csv` (`data/processed/`) | Tier 2 REAL basin polygon | To be created via QGIS georeferencing of [geology.esdm.go.id/geomigas](https://geology.esdm.go.id/geomigas) | Cite Badan Geologi per their terms | 📋 (planned — highest-priority next step) |
+| `sunda_asri_faults_digitized.csv` (`data/processed/`) | Tier 2 REAL fault traces | To be created via QGIS georeferencing / seismic interpretation | Internal derived product | 📋 (planned) |
+| `gebco_2026_*.nc`, `GlobSed-v3.nc` (`data/raw/`) | Tier 2 REAL depth surface | GEBCO + GlobSed (see rows above) | Free, mandatory citation | 📋 (Tier 2 notebook auto-detects and uses these the moment they're placed in `data/raw/`) |
+
+> **How Tier 2 decides real vs. illustrative**: `notebooks/01_tier2_sunda_asri_workflow.ipynb`
+> checks `data/processed/sunda_asri_boundary_digitized.csv` and the GEBCO/GlobSed
+> paths in `config.yaml` first. If any are missing, it falls back to the
+> illustrative files above and a synthetic depth surface — and prints exactly
+> which source was used in Section 1 of the notebook. There is never a silent
+> mix of real and fake data.
 
 ## Literature benchmark (not raw data, but comparison figures)
 

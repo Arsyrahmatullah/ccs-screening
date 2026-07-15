@@ -1,26 +1,26 @@
 name,cluster,sector,lat,lon,capacity_mtpa_co2_est,data_status
-Jakarta-Cilegon-Bojonegara - fasilitas 1,Jakarta-Cilegon-Bojonegara,coal_power,-6.255997615936074,106.41256767937097,4.27,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Jakarta-Cilegon-Bojonegara - fasilitas 2,Jakarta-Cilegon-Bojonegara,gas_power,-6.392655278298075,106.10467307397064,4.64,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Jakarta-Cilegon-Bojonegara - fasilitas 3,Jakarta-Cilegon-Bojonegara,oil_gas_processing,-6.102520173625643,106.17204341086396,2.41,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Jakarta-Cilegon-Bojonegara - fasilitas 4,Jakarta-Cilegon-Bojonegara,gas_power,-5.983331209685657,106.30990460463418,4.99,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Jakarta-Cilegon-Bojonegara - fasilitas 5,Jakarta-Cilegon-Bojonegara,oil_gas_processing,-6.228893869432485,106.35531261761237,0.66,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Jakarta-Cilegon-Bojonegara - fasilitas 6,Jakarta-Cilegon-Bojonegara,cement,-5.968232454803909,106.29251111335206,4.62,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Jakarta-Cilegon-Bojonegara - fasilitas 7,Jakarta-Cilegon-Bojonegara,oil_gas_processing,-5.916618799198895,106.27682057768968,4.74,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Jakarta-Cilegon-Bojonegara - fasilitas 8,Jakarta-Cilegon-Bojonegara,cement,-6.152820032573234,106.379846377833,0.55,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Surabaya-Gresik - fasilitas 1,Surabaya-Gresik,oil_gas_processing,-7.135376849548818,113.02124714013057,5.81,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Surabaya-Gresik - fasilitas 2,Surabaya-Gresik,coal_power,-7.2768364093607305,112.57793409076282,2.98,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Surabaya-Gresik - fasilitas 3,Surabaya-Gresik,gas_power,-7.217092118648232,112.57397652845562,1.59,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Surabaya-Gresik - fasilitas 4,Surabaya-Gresik,coal_power,-7.102411081826295,112.81148812568053,5.05,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Surabaya-Gresik - fasilitas 5,Surabaya-Gresik,oil_gas_processing,-7.118526859754221,112.60017354390669,4.89,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Palembang-Muara Enim - fasilitas 1,Palembang-Muara Enim,oil_gas_processing,-3.4824971286288906,104.23280328950935,4.19,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Palembang-Muara Enim - fasilitas 2,Palembang-Muara Enim,oil_gas_processing,-3.398162965539216,104.21013686042333,4.79,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Palembang-Muara Enim - fasilitas 3,Palembang-Muara Enim,coal_power,-3.405306766124219,103.98142662702165,4.75,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Palembang-Muara Enim - fasilitas 4,Palembang-Muara Enim,oil_gas_processing,-3.595831677236501,104.158728662316,0.95,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Medan-Belawan - fasilitas 1,Medan-Belawan,cement,3.570125332646014,98.84524175318873,3.52,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Medan-Belawan - fasilitas 2,Medan-Belawan,coal_power,3.724412959765751,98.78793334970389,3.49,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Medan-Belawan - fasilitas 3,Medan-Belawan,gas_power,3.819002085279989,98.64769123916274,2.79,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Bontang-Balikpapan - fasilitas 1,Bontang-Balikpapan,gas_power,-0.3286956487322422,117.20864705149931,1.63,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Bontang-Balikpapan - fasilitas 2,Bontang-Balikpapan,coal_power,-0.4379178429002417,117.47457411160806,1.97,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Bontang-Balikpapan - fasilitas 3,Bontang-Balikpapan,cement,-0.3640878969504801,117.4237809536615,4.09,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Papua Barat (Tangguh) - fasilitas 1,Papua Barat (Tangguh),oil_gas_processing,-2.3464019809580354,133.46851628563363,1.25,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
-Papua Barat (Tangguh) - fasilitas 2,Papua Barat (Tangguh),cement,-2.357260684099749,133.22062405316166,2.93,CONTOH/SYNTHETIC - ganti dengan Global Energy Monitor tracker asli
+Jakarta-Cilegon-Bojonegara - facility 1,Jakarta-Cilegon-Bojonegara,coal_power,-6.255997615936074,106.41256767937097,4.27,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Jakarta-Cilegon-Bojonegara - facility 2,Jakarta-Cilegon-Bojonegara,gas_power,-6.392655278298075,106.10467307397064,4.64,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Jakarta-Cilegon-Bojonegara - facility 3,Jakarta-Cilegon-Bojonegara,oil_gas_processing,-6.102520173625643,106.17204341086396,2.41,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Jakarta-Cilegon-Bojonegara - facility 4,Jakarta-Cilegon-Bojonegara,gas_power,-5.983331209685657,106.30990460463418,4.99,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Jakarta-Cilegon-Bojonegara - facility 5,Jakarta-Cilegon-Bojonegara,oil_gas_processing,-6.228893869432485,106.35531261761237,0.66,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Jakarta-Cilegon-Bojonegara - facility 6,Jakarta-Cilegon-Bojonegara,cement,-5.968232454803909,106.29251111335206,4.62,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Jakarta-Cilegon-Bojonegara - facility 7,Jakarta-Cilegon-Bojonegara,oil_gas_processing,-5.916618799198895,106.27682057768968,4.74,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Jakarta-Cilegon-Bojonegara - facility 8,Jakarta-Cilegon-Bojonegara,cement,-6.152820032573234,106.379846377833,0.55,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Surabaya-Gresik - facility 1,Surabaya-Gresik,oil_gas_processing,-7.135376849548818,113.02124714013057,5.81,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Surabaya-Gresik - facility 2,Surabaya-Gresik,coal_power,-7.2768364093607305,112.57793409076282,2.98,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Surabaya-Gresik - facility 3,Surabaya-Gresik,gas_power,-7.217092118648232,112.57397652845562,1.59,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Surabaya-Gresik - facility 4,Surabaya-Gresik,coal_power,-7.102411081826295,112.81148812568053,5.05,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Surabaya-Gresik - facility 5,Surabaya-Gresik,oil_gas_processing,-7.118526859754221,112.60017354390669,4.89,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Palembang-Muara Enim - facility 1,Palembang-Muara Enim,oil_gas_processing,-3.4824971286288906,104.23280328950935,4.19,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Palembang-Muara Enim - facility 2,Palembang-Muara Enim,oil_gas_processing,-3.398162965539216,104.21013686042333,4.79,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Palembang-Muara Enim - facility 3,Palembang-Muara Enim,coal_power,-3.405306766124219,103.98142662702165,4.75,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Palembang-Muara Enim - facility 4,Palembang-Muara Enim,oil_gas_processing,-3.595831677236501,104.158728662316,0.95,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Medan-Belawan - facility 1,Medan-Belawan,cement,3.570125332646014,98.84524175318873,3.52,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Medan-Belawan - facility 2,Medan-Belawan,coal_power,3.724412959765751,98.78793334970389,3.49,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Medan-Belawan - facility 3,Medan-Belawan,gas_power,3.819002085279989,98.64769123916274,2.79,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Bontang-Balikpapan - facility 1,Bontang-Balikpapan,gas_power,-0.3286956487322422,117.20864705149931,1.63,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Bontang-Balikpapan - facility 2,Bontang-Balikpapan,coal_power,-0.4379178429002417,117.47457411160806,1.97,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+Bontang-Balikpapan - facility 3,Bontang-Balikpapan,cement,-0.3640878969504801,117.4237809536615,4.09,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+West Papua (Tangguh) - facility 1,West Papua (Tangguh),oil_gas_processing,-2.3464019809580354,133.46851628563363,1.25,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker
+West Papua (Tangguh) - facility 2,West Papua (Tangguh),cement,-2.357260684099749,133.22062405316166,2.93,SAMPLE/SYNTHETIC - replace with actual Global Energy Monitor tracker

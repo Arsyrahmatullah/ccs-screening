@@ -130,3 +130,43 @@ def summarize_zones(screened_grid: pd.DataFrame) -> pd.DataFrame:
         .reset_index(drop=True)
     )
     return summary
+
+def distance_to_nearest_fault_km(
+    lon: np.ndarray,
+    lat: np.ndarray,
+    fault_lines_df: pd.DataFrame,
+    fault_id_col: str = "fault_id",
+    lon_col: str = "lon",
+    lat_col: str = "lat",
+) -> np.ndarray:
+    """
+    Distance (km) from each (lon, lat) grid point to the nearest fault trace,
+    using Shapely LineStrings built from `fault_lines_df` (grouped by
+    `fault_id_col`). Distances are computed in decimal-degree space and
+    converted to km via a flat ~111 km/degree approximation — adequate at
+    the scale of a single sedimentary basin (a few hundred km), analogous to
+    the fault setback approach in [MB] §4.5.1, but NOT geodesically exact.
+
+    Returns an array the same shape as `lon`/`lat`.
+    """
+    from shapely.geometry import LineString, Point
+
+    faults = []
+    for _, group in fault_lines_df.groupby(fault_id_col):
+        coords = list(zip(group[lon_col], group[lat_col]))
+        if len(coords) >= 2:
+            faults.append(LineString(coords))
+
+    if not faults:
+        return np.full(np.asarray(lon).shape, np.inf)
+
+    lon_flat = np.asarray(lon).ravel()
+    lat_flat = np.asarray(lat).ravel()
+    distances_deg = np.empty(lon_flat.shape, dtype=float)
+
+    for i, (x, y) in enumerate(zip(lon_flat, lat_flat)):
+        point = Point(x, y)
+        distances_deg[i] = min(f.distance(point) for f in faults)
+
+    distances_km = distances_deg * 111.0  # rough flat-earth approximation
+    return distances_km.reshape(np.asarray(lon).shape)

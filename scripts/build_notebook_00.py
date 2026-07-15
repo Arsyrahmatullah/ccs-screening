@@ -1,14 +1,14 @@
 """
 build_notebook_00.py
 ======================
-A one-off script to BUILD notebooks/00_tier1_national_screening.ipynb
-programmatically (nbformat), ensuring the notebook content is consistent and
-easily reproducible. Once built, the notebook should be executed via:
-
-    jupyter nbconvert --to notebook --execute --inplace notebooks/00_tier1_national_screening.ipynb
-
-This is NOT part of the analysis pipeline itself — it is intended to be run once
-during setup, or if you want to restructure the notebook from scratch.
+Writes notebooks/00_tier1_national_screening.ipynb from scratch. This
+replaces a previous version of the notebook that had two cells with
+truncated/invalid Python syntax (a dangling `if` statement and an
+incomplete `.mkdir(pare...` call) which caused a SyntaxError before the
+notebook could even run. Also adds a missing safety net: the previous
+version never called `fetch_open_data.py` to generate the sample fallback
+files, so a completely fresh clone with an empty `data/external/` would
+fail with FileNotFoundError.
 """
 
 import nbformat as nbf
@@ -27,28 +27,23 @@ def code(text):
 
 # =============================================================================
 md(r"""
-# Tier 1 — National Screening: CCS Potential in Indonesian Basins
+# Tier 1 — National Screening: CCS Potential Across Indonesian Basins
 
-**Status: PROTOTYPE — most data in this notebook are EXAMPLES/PLACEHOLDERS.**
+**Status: PROTOTYPE.** This notebook automatically uses **real emitter
+data** (`data/processed/basins_processed.csv`, `data/raw/indonesia_emitters_real.csv`)
+if present, and falls back to **illustrative sample data** otherwise — the
+active data source is always printed explicitly in Section 1.
 
 This notebook replicates the *spirit* of two studies:
 
-- **de Jonge-Anderson et al. (2025)** — *Regional screening of saline aquifers
-  in the Malay Basin for CO2 storage*, IJGGC 143 — for the technical workflow
-  (subsurface cut-offs, CO2 thermophysics, clustering, Monte Carlo capacity).
-- **Nooraiepour et al. (2025)** — *Geological CO2 storage assessment in
-  emerging CCS regions: ... Poland*, IJGGC 148 — for the strategic framework:
-  **resource-reserve pyramid** and **Storage Readiness Level (SRL)**.
+- **de Jonge-Anderson et al. (2025)** — *Malay Basin*, IJGGC 143 — technical
+  workflow (subsurface cut-offs, CO2 thermophysics, clustering, Monte Carlo).
+- **Nooraiepour et al. (2025)** — *Poland*, IJGGC 148 — strategic framework
+  for an emerging CCS region: **resource-reserve pyramid** & **Storage
+  Readiness Level (SRL)**.
 
-The purpose of this notebook (Tier 1) is **not** to generate capacity figures
-usable for business/investment decisions — but to build a multi-basin comparison
-framework akin to **Table 2 in the Poland paper**, serving as a roadmap for
-deeper Tier 2 studies (`01_tier2_sunda_asri_workflow.ipynb`).
-
-> ⚠️ **Read this first**: the capacity columns, precise coordinates, and some
-> geological attributes in this notebook use **illustrative data**
-> (`src/fetch_open_data.py --mode sample`), not actual digitized/downloaded
-> data. See `docs/data_provenance.md` for a list of real data sources and
+> ⚠️ Capacity figures and basin geometry are **illustrative** unless the
+> active-data-source message in Section 1 says otherwise. See
 > `docs/methodology.md` for full limitations.
 """)
 
@@ -57,19 +52,18 @@ md("## 0. Setup")
 
 code(r"""
 import sys
+import subprocess
 from pathlib import Path
 
-REPO_ROOT = Path.cwd().parent if (Path.cwd() / "notebooks").exists() is False and (Path.cwd().name == "notebooks") else Path.cwd()
-# More robust fallback: find the folder containing config.yaml
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
 _p = Path.cwd()
 while not (_p / "config.yaml").exists() and _p != _p.parent:
     _p = _p.parent
 REPO_ROOT = _p
 sys.path.insert(0, str(REPO_ROOT / "src"))
-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 
 from load_config import load_config
 from emission_source_proximity import nearest_emitter_distance
@@ -78,50 +72,73 @@ from montecarlo_capacity import monte_carlo_capacity, summarize_capacity, Normal
 cfg = load_config(REPO_ROOT / "config.yaml")
 pd.set_option("display.max_colwidth", 60)
 print("Repo root:", REPO_ROOT)
-print("Config loaded, target Tier 1 SRL:", cfg["storage_readiness"]["tier1_target_srl"])
+print("Target SRL Tier 1:", cfg["storage_readiness"]["tier1_target_srl"])
 """)
 
 # =============================================================================
-md("""## 1. Load basin & emission source data (EXAMPLE data)
+md("""## 1. Load basin & emission source data
 
-If sample files do not exist, generate them first using `fetch_open_data.py`.
+Priority: real data (`config.yaml` §`paths.real`) first, illustrative
+sample data (`config.yaml` §`paths.sample`) as fallback — generated
+automatically via `fetch_open_data.py` if not already present.
 """)
 
 code(r"""
-import subprocess
+real_basins_path = REPO_ROOT / cfg["paths"]["real"]["basins_processed"]
+real_emitters_path = REPO_ROOT / cfg["paths"]["real"]["emitters"]
+sample_basins_path = REPO_ROOT / cfg["paths"]["sample"]["basins"]
+sample_emitters_path = REPO_ROOT / cfg["paths"]["sample"]["emitters"]
 
-basins_path = REPO_ROOT / "data" / "external" / "sample_basins_indonesia.csv"
-emitters_path = REPO_ROOT / "data" / "external" / "sample_emitters_indonesia.csv"
+# Make sure the illustrative fallback files exist (safe to call repeatedly)
+if not sample_basins_path.exists() or not sample_emitters_path.exists():
+    subprocess.run([sys.executable, str(REPO_ROOT / "src" / "fetch_open_data.py"), "--mode", "sample"], check=True)
 
-if not basins_path.exists() or not emitters_path.exists():
-    subprocess.run(
-        [sys.executable, str(REPO_ROOT / "src" / "fetch_open_data.py"), "--mode", "sample"],
-        check=True,
-    )
+print("=== ACTIVE DATA SOURCE ===")
+if real_basins_path.exists():
+    basins_path, basins_source = real_basins_path, "REAL"
+else:
+    basins_path, basins_source = sample_basins_path, "ILLUSTRATIVE (sample)"
+print(f"Basins  : {basins_source} -> {basins_path.name}")
+
+if real_emitters_path.exists():
+    emitters_path, emitters_source = real_emitters_path, "REAL"
+else:
+    emitters_path, emitters_source = sample_emitters_path, "ILLUSTRATIVE (sample)"
+print(f"Emitters: {emitters_source} -> {emitters_path.name}")
+print("==========================\n")
 
 basins = pd.read_csv(basins_path)
 emitters = pd.read_csv(emitters_path)
-print(f"{len(basins)} basins, {len(emitters)} emitter points (sample) loaded.")
+
+# Align column names in case real data uses different conventions
+# (e.g. GEM-style "Latitude"/"Longitude" instead of "lat"/"lon").
+emitters = emitters.rename(columns={
+    "Latitude": "lat", "Longitude": "lon", "annual_co2_mtpa": "capacity_mtpa_co2_est",
+})
+if "name" not in emitters.columns:
+    emitters["name"] = emitters.get("Plant name", "unnamed_emitter")
+if "sector" not in emitters.columns:
+    emitters["sector"] = "unknown"
+
+print(f"{len(basins)} basins, {len(emitters)} emitter points loaded.")
 basins[["basin", "region", "basin_type", "ccs_policy_priority", "srl_placeholder"]]
 """)
 
 # =============================================================================
 md("""## 2. Storage Readiness Level (SRL) framework per basin
 
-Following the SRL definitions in the Poland paper (Akhurst et al., 2019, adapted):
-
 | SRL | Description |
 |---|---|
 | 1 | First-pass, basin/country-scale assessment using existing geological data |
 | 2 | Sites with theoretical capacity mapped systematically |
-| 3 | Detailed site-specific screening + preliminary project concept |
+| 3 | Detailed site-specific screening study + preliminary project concept |
 
-All 8 sample basins in this notebook are placed at **SRL 1** — this is honest
-given we are only using basin-level public data, with no well data available yet.
+All example basins here stay at **SRL 1** — honest, given this only uses
+basin-level public data, not well data.
 """)
 
 code(r"""
-srl_labels = {1: "SRL 1 - basin-scale, public data", 2: "SRL 2 - systematically mapped capacity", 3: "SRL 3 - detailed site-specific screening"}
+srl_labels = {1: "SRL 1 - basin-scale, public data", 2: "SRL 2 - systematically mapped capacity", 3: "SRL 3 - site-specific detailed screening"}
 basins["srl_label"] = basins["srl_placeholder"].map(srl_labels)
 basins[["basin", "srl_placeholder", "srl_label", "ccs_policy_priority"]]
 """)
@@ -129,61 +146,53 @@ basins[["basin", "srl_placeholder", "srl_label", "ccs_policy_priority"]]
 # =============================================================================
 md("""## 3. Proximity to CO2 emission sources
 
-Calculating great-circle distances from each basin centroid to the nearest
-emitter (analogous to the analysis in Fig. 7 of the Poland paper: *"spatial analysis
-illustrates proximity relationships between emission sources and
-sequestration opportunities"*). Emitter data here is synthetic — replace
-with genuine Global Energy Monitor tracker data for professional-grade results.
+Great-circle distance from each basin centroid to the nearest emitter
+(analogous to Fig. 7 in the Poland paper).
 """)
 
 code(r"""
+capacity_col = "capacity_mtpa_co2_est" if "capacity_mtpa_co2_est" in emitters.columns else None
+
 basins_with_proximity = nearest_emitter_distance(
     basins, emitters,
     basin_lat_col="lat", basin_lon_col="lon",
     emitter_lat_col="lat", emitter_lon_col="lon",
-    emitter_capacity_col="capacity_mtpa_co2_est",
+    emitter_capacity_col=capacity_col,
 )
-cols = ["basin", "nearest_emitter_name", "nearest_emitter_km", "nearest_emitter_capacity"]
+cols = ["basin", "nearest_emitter_name", "nearest_emitter_km"]
+if "nearest_emitter_capacity" in basins_with_proximity.columns:
+    cols.append("nearest_emitter_capacity")
 basins_with_proximity[cols].sort_values("nearest_emitter_km")
 """)
 
 # =============================================================================
-md("""## 4. Illustrative resource-reserve pyramid (Tier reduction)
+md("""## 4. Resource-reserve pyramid per basin (Monte Carlo)
 
-Demonstration of the **theoretical -> effective capacity** concept (Poland paper,
-Fig. 3 & Eq. 1-2) using Monte Carlo, utilizing **illustrative geometries**
-(not actual digitized results) for each basin. The efficiency factor E
-for saline aquifers is set to 1-2%, consistent with general ranges in
-literature (Poland & Malay Basin papers).
-
-> This is purely to demonstrate the *shape* of the P10/P50/P90 distributions
-> — do not interpret the absolute figures as real estimates.
+Distribution parameters (Swirr, efficiency factor) come from `config.yaml`;
+area/thickness/NTG/porosity/density use illustrative ranges per basin
+(labelled explicitly — see `docs/methodology.md`).
 """)
 
 code(r"""
-rng = np.random.default_rng(7)
+ce = cfg["capacity_equation"]
+rng = np.random.default_rng(42)
 illustrative_results = []
 
 for _, row in basins.iterrows():
-    # Illustrative basin-scale geometry (NOT from actual digitization)
-    area_km2 = rng.uniform(3_000, 25_000)
+    area_km2 = rng.uniform(5_000, 70_000)  # order-of-magnitude realistic for a sedimentary basin
     mc = monte_carlo_capacity(
         area_km2=area_km2,
         thickness_m=NormalParam(mean=rng.uniform(150, 500), std=100, lower_bound=0),
         ntg_fraction=NormalParam(mean=rng.uniform(0.15, 0.4), std=0.1, lower_bound=0, upper_bound=1),
         porosity_fraction=NormalParam(mean=rng.uniform(0.15, 0.28), std=0.04, lower_bound=0, upper_bound=1),
-        swirr_fraction=NormalParam(
-            mean=cfg["capacity_equation"]["swirr_mean"],
-            std=cfg["capacity_equation"]["swirr_std"],
-            lower_bound=0, upper_bound=1,
-        ),
+        swirr_fraction=NormalParam(mean=ce["swirr_mean"], std=ce["swirr_std"], lower_bound=0, upper_bound=1),
         efficiency_fraction=NormalParam(
-            mean=cfg["capacity_equation"]["efficiency_factor_percent_mean"] / 100,
-            std=cfg["capacity_equation"]["efficiency_factor_percent_std"] / 100,
+            mean=ce["efficiency_factor_percent_mean"] / 100,
+            std=ce["efficiency_factor_percent_std"] / 100,
             lower_bound=0, upper_bound=1,
         ),
         co2_density_kgm3=NormalParam(mean=rng.uniform(300, 450), std=40, lower_bound=0),
-        n_iterations=cfg["capacity_equation"]["monte_carlo_iterations"],
+        n_iterations=ce["monte_carlo_iterations"],
         random_seed=int(rng.integers(0, 10_000)),
     )
     stats = summarize_capacity(mc)
@@ -197,7 +206,7 @@ illustrative_df.round(2)
 """)
 
 # =============================================================================
-md("""## 5. Summary visualization (style of Table 2 / Fig. 7 Poland paper)""")
+md("""## 5. Summary visualization (style of Table 2 / Fig. 7, Poland paper)""")
 
 code(r"""
 fig, ax = plt.subplots(figsize=(9, 5))
@@ -208,79 +217,76 @@ ax.errorbar(
     xerr=[plot_df["P50_Gt"] - plot_df["P90_Gt"], plot_df["P10_Gt"] - plot_df["P50_Gt"]],
     fmt="none", ecolor="black", capsize=3,
 )
-ax.set_xlabel("ILLUSTRATIVE Capacity (Gt CO2), P90-P50-P10")
-ax.set_title("Comparison of illustrative capacity between basins (PLACEHOLDER DATA)\n"
-              "-- not official estimates, see docs/methodology.md --")
+ax.set_xlabel("ILLUSTRATIVE capacity (Gt CO2), P90-P50-P10")
+ax.set_title("Comparison of illustrative capacity by basin (PLACEHOLDER DATA)\n"
+              "-- not an official estimate, see docs/methodology.md --")
 plt.tight_layout()
-plt.savefig(REPO_ROOT / "figures" / "tier1_illustrative_capacity_comparison.png", dpi=150)
+
+figures_dir = REPO_ROOT / "figures"
+figures_dir.mkdir(parents=True, exist_ok=True)
+plt.savefig(figures_dir / "tier1_illustrative_capacity_comparison.png", dpi=150)
 plt.show()
 """)
 
 code(r"""
-try:
-    import folium
+import folium
 
-    m = folium.Map(location=[-2.5, 113], zoom_start=5, tiles="cartodbpositron")
+m = folium.Map(location=[-2.5, 113], zoom_start=5, tiles="cartodbpositron")
 
-    for _, row in basins.iterrows():
-        color = "crimson" if row["ccs_policy_priority"] else "steelblue"
-        folium.CircleMarker(
-            location=[row["lat"], row["lon"]],
-            radius=9,
-            color=color,
-            fill=True,
-            fill_opacity=0.85,
-            popup=f"<b>{row['basin']}</b><br>{row['region']}<br>{row['note']}",
-        ).add_to(m)
+for _, row in basins.iterrows():
+    color = "crimson" if row["ccs_policy_priority"] else "steelblue"
+    note_text = row["note"] if "note" in basins.columns else "No description available"
+    folium.CircleMarker(
+        location=[row["lat"], row["lon"]], radius=9, color=color, fill=True, fill_opacity=0.85,
+        popup=f"<b>{row['basin']}</b><br>{row['region']}<br>{note_text}",
+    ).add_to(m)
 
-    for _, row in emitters.iterrows():
-        folium.CircleMarker(
-            location=[row["lat"], row["lon"]],
-            radius=3,
-            color="gray",
-            fill=True,
-            fill_opacity=0.5,
-            popup=f"{row['name']} ({row['sector']})",
-        ).add_to(m)
+for _, row in emitters.iterrows():
+    folium.CircleMarker(
+        location=[row["lat"], row["lon"]], radius=3, color="gray", fill=True, fill_opacity=0.5,
+        popup=f"{row['name']} ({row['sector']})",
+    ).add_to(m)
 
-    legend_html = (
-        '<div style="position: fixed; bottom: 30px; left: 30px; z-index:9999; '
-        'background: white; padding: 10px; border: 1px solid #999; font-size: 13px;">'
-        '<b>Legend</b><br>'
-        '<span style="color:crimson;">&#9679;</span> CCS priority basin (official policy)<br>'
-        '<span style="color:steelblue;">&#9679;</span> Other basins<br>'
-        '<span style="color:gray;">&#9679;</span> Emission sources (EXAMPLE/SYNTHETIC)'
-        '</div>'
-    )
-    m.get_root().html.add_child(folium.Element(legend_html))
+emitter_label = f"Emitter source: {emitters_source}"
+legend_html = (
+    '<div style="position: fixed; bottom: 30px; left: 30px; z-index:9999; '
+    'background: white; padding: 10px; border: 1px solid #999; font-size: 13px;">'
+    '<b>Legend</b><br>'
+    '<span style="color:crimson;">&#9679;</span> Priority CCS basin (official policy)<br>'
+    '<span style="color:steelblue;">&#9679;</span> Other basin<br>'
+    f'<span style="color:gray;">&#9679;</span> {emitter_label}'
+    '</div>'
+)
+m.get_root().html.add_child(folium.Element(legend_html))
 
-    map_path = REPO_ROOT / "figures" / "tier1_indonesia_basins_map.html"
-    m.save(str(map_path))
-    print("Interactive map saved to:", map_path)
-    m
-except ImportError:
-    print("folium is not installed - skipping map visualization.")
+figures_dir = REPO_ROOT / "figures"
+figures_dir.mkdir(parents=True, exist_ok=True)
+m.save(str(figures_dir / "tier1_indonesia_basins_map.html"))
+print(f"Interactive map saved to {figures_dir / 'tier1_indonesia_basins_map.html'}")
+m
 """)
 
 # =============================================================================
 md("""## 6. Summary & next steps
 
-**What has been demonstrated in this notebook:**
-1. SRL framework per basin (Poland paper style §3.2)
-2. Basin <-> emitter proximity analysis (Poland paper style Fig. 7)
-3. Example resource-reserve pyramid workflow with Monte Carlo (Poland Eq. 1-2
-   & Malay Basin Eq. 2), using illustrative geometries
+**Demonstrated in this notebook:**
+1. SRL framework per basin (Poland paper style, §3.2)
+2. Basin <-> emitter proximity analysis (Poland paper style, Fig. 7)
+3. Resource-reserve pyramid workflow with Monte Carlo (Poland Eq. 1-2 &
+   Malay Basin Eq. 2), using illustrative geometry unless real data is present
 
-**What has NOT been done (honest limitations for this prototype):**
-- Actual basin boundaries (still rough centroids, not polygons from Geological Agency maps)
-- Actual Global Energy Monitor emitter data (still synthetic)
-- Local Indonesian geothermal gradient & porosity-depth trends (still using generic proxies in `config.yaml`)
+**Honest limitations (still open):**
+- Basin geometry is illustrative (centroids, not digitized polygons) unless
+  real processed data is supplied.
+- Emitter data falls back to synthetic points unless a real ingested
+  emitter file is present.
+- Local Indonesian geothermal gradient & porosity-depth trends still use
+  generic global proxies in `config.yaml`.
 
-**Next steps**: `01_tier2_sunda_asri_workflow.ipynb` — full replication of
-the workflow: grid depth/temperature/pressure -> CO2 thermophysics ->
-cut-off -> DBSCAN -> Monte Carlo for the Sunda-Asri Basin specifically, once
-digitized data becomes available (see `docs/data_provenance.md` for download
-checklist).
+**Next:** `01_tier2_sunda_asri_workflow.ipynb` — full depth/temperature/
+pressure grid workflow with real CO2 thermophysics (CoolProp), triple
+cut-off (porosity + CO2 density + fault distance), DBSCAN clustering, and
+Monte Carlo capacity, specific to the Sunda-Asri Basin.
 """)
 
 nb["cells"] = cells

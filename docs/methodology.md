@@ -43,13 +43,21 @@ Contributions adapted:
 
 This project **does not** have access to:
 - Well data (stratigraphic tops, wireline logs, formation pressure tests) which were the backbone of [MB]—they gained access through a partnership with PETRONAS.
-- Local porosity-depth data calibrated per Indonesian basin—currently, `config.yaml` uses a generic proxy (25-35°C/km band from global literature, following [PL]'s assumption for Poland).
-- Seismic-validated depth structure maps.
+- Local porosity-depth data calibrated per Indonesian basin—currently, `config.yaml` uses a generic proxy for both the porosity-depth decay trend (§`tier2_reservoir_proxy`) and the geothermal gradient (25-35°C/km band from global literature, following [PL]'s assumption for Poland).
+- Seismic-validated depth structure maps, or an official digitization of the Sunda-Asri basin boundary/fault network.
 
 Consequences:
-- All capacity figures in `notebooks/00_tier1_national_screening.ipynb` use **random illustrative geometry**, not measurement/digitization results. This is explicitly noted in every relevant cell.
+- All capacity figures in `notebooks/00_tier1_national_screening.ipynb` use **illustrative basin-scale geometry**, not measurement/digitization results. This is explicitly noted in every relevant cell and printed at runtime.
+- `notebooks/01_tier2_sunda_asri_workflow.ipynb` uses an **illustrative hand-drawn boundary/fault network** and a **synthetic bowl-shaped depth surface** unless you supply real GEBCO/GlobSed grids and a QGIS-digitized boundary (see `docs/data_provenance.md`). The notebook always prints which inputs were real vs. illustrative for a given run — check that output before citing a number.
 - This project is realistically capped at **SRL 1-2**, not SRL 3+ like [MB].
 - Any claim of "X Gt potential in Y basin" from external sources (e.g., claims of >400 Gt CO2-eq nationally in depleted reservoirs according to Presidential Regulation 14/2024, or ~14.8 Gt of saline formation in South Sumatra + Java from Hedriana et al., 2017) is cited as **context/benchmark**, not as calculation results from this project.
+
+What is **not** a limitation: CO2 density and phase in both tiers are computed
+from the real CoolProp equation of state (`src/co2_thermophysics.py`), and
+all three [MB] cut-off criteria (porosity, CO2 density, fault distance) are
+applied together in Tier 2 — these parts of the methodology are implemented
+as designed, independent of whether the underlying geometry is real or
+illustrative.
 
 ## 5. Roadmap for SRL improvement (technical)
 
