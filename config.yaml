@@ -78,7 +78,14 @@ clustering:
   eps_grid_cells: 100                 # neighbourhood radius for POINT-CLOUD data (src/optimal_zone_screening.py)
   eps_raster_pixels: 2                # neighbourhood radius for RASTER/grid data (Tier 2 notebook, adjacent-pixel connectivity)
   min_samples: 5
-
+  
+# -----------------------------------------------------------------------------
+# Tier 1 accessibility scoring — gravity-style cost proxy for basin selection
+# (see src/emission_source_proximity.py::basin_accessibility_scores)
+# -----------------------------------------------------------------------------
+tier1_scoring:
+  search_radius_km: 200        # "loose, realistic for a regional hub" per project decision
+  min_distance_floor_km: 5.0   # prevents divide-by-zero for co-located emitters
 # -----------------------------------------------------------------------------
 # Tier 2 reservoir proxies — Sunda-Asri Basin, SRL 1-2
 # Used until real well-derived NTG/porosity/thickness data becomes available.

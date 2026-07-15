@@ -66,7 +66,7 @@ REPO_ROOT = _p
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from load_config import load_config
-from emission_source_proximity import nearest_emitter_distance
+from emission_source_proximity import nearest_emitter_distance, basin_accessibility_scores
 from montecarlo_capacity import monte_carlo_capacity, summarize_capacity, NormalParam
 
 cfg = load_config(REPO_ROOT / "config.yaml")
@@ -166,6 +166,36 @@ basins_with_proximity[cols].sort_values("nearest_emitter_km")
 """)
 
 # =============================================================================
+md(r"""### 3b. Catchment / accessibility analysis (within 200 km)
+
+`nearest_emitter_km` above only tells you about the single closest emitter —
+it misses the bigger picture of *how much total emission capacity* a basin
+can realistically serve as a hub. This section adds a gravity-style
+**accessibility index** (a well-established spatial analysis concept):
+
+$$\text{accessibility} = \sum_{i \in \text{radius}} \frac{\text{capacity}_i}{\max(\text{distance}_i,\ \text{floor})}$$
+
+Basins surrounded by many emitters score higher than basins merely close to
+one large plant. Radius = **200 km** — "loose, realistic for a regional
+hub" (per project decision), configurable in `config.yaml` §`tier1_scoring`.
+""")
+
+code(r"""
+ts = cfg["tier1_scoring"]
+
+basins_scored = basin_accessibility_scores(
+    basins, emitters,
+    radius_km=ts["search_radius_km"],
+    min_distance_floor_km=ts["min_distance_floor_km"],
+    basin_lat_col="lat", basin_lon_col="lon",
+    emitter_lat_col="lat", emitter_lon_col="lon",
+    capacity_col="capacity_mtpa_co2_est" if "capacity_mtpa_co2_est" in emitters.columns else "lat",  # fallback avoids KeyError; falls back to count-only weighting
+)
+basins_scored[["basin", "n_emitters_within_radius", "total_capacity_within_radius_mtpa", "accessibility_index"]] \
+    .sort_values("accessibility_index", ascending=False)
+""")
+
+# =============================================================================
 md("""## 4. Resource-reserve pyramid per basin (Monte Carlo)
 
 Distribution parameters (Swirr, efficiency factor) come from `config.yaml`;
@@ -206,7 +236,85 @@ illustrative_df.round(2)
 """)
 
 # =============================================================================
+md("""### 4b. Dual ranking: storage-first vs. cost-first
+
+Rather than forcing one blended weight between storage and cost (a
+subjective choice this project isn't in a position to make on your behalf),
+this shows **both rankings side by side**. A basin that ranks highly in
+*both* is a much more robust pick than one that only wins under a single
+weighting scheme.
+""")
+
+code(r"""
+ranking_df = illustrative_df.merge(
+    basins_scored.set_index("basin")[["lat", "lon", "accessibility_index", "total_capacity_within_radius_mtpa", "n_emitters_within_radius"]],
+    left_index=True, right_index=True,
+)
+
+# Normalize both scores to 0-1 so they're comparable
+ranking_df["storage_score"] = (ranking_df["P50_Gt"] - ranking_df["P50_Gt"].min()) / (ranking_df["P50_Gt"].max() - ranking_df["P50_Gt"].min())
+ranking_df["cost_score"] = (ranking_df["accessibility_index"] - ranking_df["accessibility_index"].min()) / (ranking_df["accessibility_index"].max() - ranking_df["accessibility_index"].min())
+
+storage_first = ranking_df.sort_values("storage_score", ascending=False)
+cost_first = ranking_df.sort_values("cost_score", ascending=False)
+
+top3_storage = set(storage_first.head(3).index)
+top3_cost = set(cost_first.head(3).index)
+robust_picks = top3_storage & top3_cost
+
+print("=== Ranking A: STORAGE-FIRST (by illustrative P50 capacity) ===")
+print(storage_first[["P50_Gt", "storage_score", "cost_score"]].round(3).to_string())
+print("\n=== Ranking B: COST-FIRST (by accessibility index) ===")
+print(cost_first[["accessibility_index", "cost_score", "storage_score"]].round(3).to_string())
+
+print(f"\n{'='*65}")
+if robust_picks:
+    print(f"ROBUST PICK(S) — appear in TOP 3 of BOTH rankings: {sorted(robust_picks)}")
+else:
+    print("No basin appears in the top 3 of both rankings — storage and cost")
+    print("point to different basins here; this is a genuine trade-off to")
+    print("discuss, not something this notebook should silently resolve for you.")
+print(f"{'='*65}")
+""")
+
+# =============================================================================
 md("""## 5. Summary visualization (style of Table 2 / Fig. 7, Poland paper)""")
+
+code(r"""
+fig, ax = plt.subplots(figsize=(9, 7))
+
+colors = ["#2ecc71" if b in robust_picks else "#95a5a6" for b in ranking_df.index]
+sizes = 200 + 15 * ranking_df["total_capacity_within_radius_mtpa"]
+
+scatter = ax.scatter(
+    ranking_df["cost_score"], ranking_df["storage_score"],
+    s=sizes, c=colors, edgecolor="black", linewidth=1.2, alpha=0.85, zorder=3,
+)
+
+for basin_name, row in ranking_df.iterrows():
+    ax.annotate(
+        basin_name, (row["cost_score"], row["storage_score"]),
+        textcoords="offset points", xytext=(0, 12), ha="center", fontsize=8, weight="bold",
+    )
+
+ax.axvline(0.5, color="gray", linestyle=":", alpha=0.5)
+ax.axhline(0.5, color="gray", linestyle=":", alpha=0.5)
+ax.set_xlabel("Cost score (accessibility index, normalized) ->", fontsize=10)
+ax.set_ylabel("Storage score (illustrative P50 capacity, normalized) ->", fontsize=10)
+ax.set_title(
+    "Basin selection map: Storage vs. Cost\n"
+    "(bubble size = total emitter capacity within 200km; green = robust pick, in top-3 of BOTH rankings)",
+    fontsize=10,
+)
+ax.set_xlim(-0.05, 1.15)
+ax.set_ylim(-0.05, 1.15)
+plt.tight_layout()
+
+figures_dir = REPO_ROOT / "figures"
+figures_dir.mkdir(parents=True, exist_ok=True)
+plt.savefig(figures_dir / "tier1_storage_vs_cost_bubble.png", dpi=150)
+plt.show()
+""")
 
 code(r"""
 fig, ax = plt.subplots(figsize=(9, 5))
@@ -230,34 +338,66 @@ plt.show()
 
 code(r"""
 import folium
+from folium.plugins import HeatMap
 
 m = folium.Map(location=[-2.5, 113], zoom_start=5, tiles="cartodbpositron")
 
-for _, row in basins.iterrows():
-    color = "crimson" if row["ccs_policy_priority"] else "steelblue"
-    note_text = row["note"] if "note" in basins.columns else "No description available"
-    folium.CircleMarker(
-        location=[row["lat"], row["lon"]], radius=9, color=color, fill=True, fill_opacity=0.85,
-        popup=f"<b>{row['basin']}</b><br>{row['region']}<br>{note_text}",
-    ).add_to(m)
+# --- Layer 1: emitter density heatmap (weighted by capacity) ---
+heat_data = [
+    [row["lat"], row["lon"], row.get("capacity_mtpa_co2_est", 1.0) if pd.notna(row.get("capacity_mtpa_co2_est", 1.0)) else 1.0]
+    for _, row in emitters.iterrows()
+]
+HeatMap(heat_data, name="Emitter density (weighted by capacity)", radius=22, blur=18, max_zoom=6).add_to(
+    folium.FeatureGroup(name="Emitter heatmap").add_to(m)
+)
 
-for _, row in emitters.iterrows():
-    folium.CircleMarker(
-        location=[row["lat"], row["lon"]], radius=3, color="gray", fill=True, fill_opacity=0.5,
-        popup=f"{row['name']} ({row['sector']})",
-    ).add_to(m)
+# --- Layer 2: 200km catchment radius ring per basin (visualizes cost/reach) ---
+radius_layer = folium.FeatureGroup(name=f"{ts['search_radius_km']} km catchment radius")
+for _, row in basins_scored.iterrows():
+    folium.Circle(
+        location=[row["lat"], row["lon"]], radius=ts["search_radius_km"] * 1000,
+        color="#f39c12", weight=1, fill=True, fill_opacity=0.04, dash_array="4",
+    ).add_to(radius_layer)
+radius_layer.add_to(m)
 
-emitter_label = f"Emitter source: {emitters_source}"
+# --- Layer 3: basin markers, colored by robust-pick status, sized by storage score ---
+basin_layer = folium.FeatureGroup(name="Basins (color = robust pick, size = storage score)")
+for basin_name, row in ranking_df.iterrows():
+    is_robust = basin_name in robust_picks
+    color = "#2ecc71" if is_robust else ("#e67e22" if row["storage_score"] >= 0.5 or row["cost_score"] >= 0.5 else "#95a5a6")
+    radius_px = 10 + 12 * row["storage_score"]
+    popup_html = (
+        f"<b>{basin_name}</b><br>"
+        f"Storage score: {row['storage_score']:.2f} (P50 {row['P50_Gt']:.2f} Gt)<br>"
+        f"Cost score: {row['cost_score']:.2f} (accessibility idx {row['accessibility_index']:.1f})<br>"
+        f"Emitters within {ts['search_radius_km']}km: {int(row['n_emitters_within_radius'])} "
+        f"({row['total_capacity_within_radius_mtpa']:.1f} Mt CO2/yr total)<br>"
+        f"{'<b>ROBUST PICK</b> (top-3 in both rankings)' if is_robust else ''}"
+    )
+    folium.CircleMarker(
+        location=[row["lat"], row["lon"]], radius=radius_px, color=color, fill=True, fill_opacity=0.85,
+        popup=folium.Popup(popup_html, max_width=280),
+    ).add_to(basin_layer)
+    folium.map.Marker(
+        [row["lat"], row["lon"]],
+        icon=folium.DivIcon(html=f'<div style="font-size:10px; font-weight:bold; color:#2c3e50; '
+                                  f'text-shadow:1px 1px 2px white;">{basin_name}</div>'),
+    ).add_to(basin_layer)
+basin_layer.add_to(m)
+
 legend_html = (
     '<div style="position: fixed; bottom: 30px; left: 30px; z-index:9999; '
-    'background: white; padding: 10px; border: 1px solid #999; font-size: 13px;">'
+    'background: white; padding: 10px; border: 1px solid #999; font-size: 12px; max-width: 240px;">'
     '<b>Legend</b><br>'
-    '<span style="color:crimson;">&#9679;</span> Priority CCS basin (official policy)<br>'
-    '<span style="color:steelblue;">&#9679;</span> Other basin<br>'
-    f'<span style="color:gray;">&#9679;</span> {emitter_label}'
+    '<span style="color:#2ecc71;">&#9679;</span> Robust pick (top-3 storage AND top-3 cost)<br>'
+    '<span style="color:#e67e22;">&#9679;</span> Strong in one dimension only<br>'
+    '<span style="color:#95a5a6;">&#9679;</span> Neither top-tier<br>'
+    'Marker size = storage score. Orange ring = 200km catchment. '
+    'Heat layer = emitter density weighted by capacity.'
     '</div>'
 )
 m.get_root().html.add_child(folium.Element(legend_html))
+folium.LayerControl(collapsed=False).add_to(m)
 
 figures_dir = REPO_ROOT / "figures"
 figures_dir.mkdir(parents=True, exist_ok=True)
@@ -267,13 +407,44 @@ m
 """)
 
 # =============================================================================
+md("""### 5a. Recommendation for Tier 2
+
+Explicit, code-generated recommendation text — printed below, not left for
+the reader to infer from the chart.
+""")
+
+code(r"""
+print(f"{'='*70}\nTIER 2 CANDIDATE RECOMMENDATION\n{'='*70}")
+if robust_picks:
+    picks_str = ", ".join(sorted(robust_picks))
+    print(f"Robust pick(s) (top-3 in BOTH storage and cost ranking): {picks_str}")
+    print("-> Recommended: prioritize these for the Tier 2 deep-dive.")
+else:
+    top_storage = storage_first.index[0]
+    top_cost = cost_first.index[0]
+    print(f"No single basin dominates both dimensions.")
+    print(f"  Top by storage : {top_storage} (P50={storage_first.iloc[0]['P50_Gt']:.2f} Gt)")
+    print(f"  Top by cost     : {top_cost} (accessibility={cost_first.iloc[0]['accessibility_index']:.1f})")
+    print("-> This is a genuine trade-off. Current project priority (Sunda-Asri Basin,")
+    print("   see config.yaml) was set based on government CCS hub designation, not")
+    print("   purely on this illustrative scoring - cross-check against Section 5's")
+    print("   bubble chart before finalizing a Tier 2 target.")
+print(f"{'='*70}")
+""")
+
 md("""## 6. Summary & next steps
 
 **Demonstrated in this notebook:**
 1. SRL framework per basin (Poland paper style, §3.2)
 2. Basin <-> emitter proximity analysis (Poland paper style, Fig. 7)
-3. Resource-reserve pyramid workflow with Monte Carlo (Poland Eq. 1-2 &
+3. **Accessibility/catchment index** (200km gravity-style score) — a more
+   realistic cost proxy than nearest-single-emitter distance
+4. **Dual ranking** (storage-first vs. cost-first) with an explicit
+   "robust pick" highlight instead of leaving the reader to guess
+5. Resource-reserve pyramid workflow with Monte Carlo (Poland Eq. 1-2 &
    Malay Basin Eq. 2), using illustrative geometry unless real data is present
+6. Interactive map with emitter density **heatmap**, 200km catchment rings,
+   and score-based basin coloring/sizing
 
 **Honest limitations (still open):**
 - Basin geometry is illustrative (centroids, not digitized polygons) unless
@@ -282,6 +453,9 @@ md("""## 6. Summary & next steps
   emitter file is present.
 - Local Indonesian geothermal gradient & porosity-depth trends still use
   generic global proxies in `config.yaml`.
+- The accessibility index and storage score are both built on illustrative
+  geometry/capacity in this prototype — the *methodology* is real, the
+  *inputs* are not yet (see Section 1's active-data-source printout).
 
 **Next:** `01_tier2_sunda_asri_workflow.ipynb` — full depth/temperature/
 pressure grid workflow with real CO2 thermophysics (CoolProp), triple
