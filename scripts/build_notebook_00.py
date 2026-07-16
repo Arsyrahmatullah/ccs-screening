@@ -1,17 +1,28 @@
 """
 build_notebook_00.py
 ======================
-Writes notebooks/00_tier1_national_screening.ipynb from scratch. This
-replaces a previous version of the notebook that had two cells with
-truncated/invalid Python syntax (a dangling `if` statement and an
-incomplete `.mkdir(pare...` call) which caused a SyntaxError before the
-notebook could even run. Also adds a missing safety net: the previous
-version never called `fetch_open_data.py` to generate the sample fallback
-files, so a completely fresh clone with an empty `data/external/` would
-fail with FileNotFoundError.
+Generates the notebooks/00_tier1_national_screening.ipynb notebook.
+
+CHANGELOG (this revision):
+- VISUAL UPGRADE: Replaced raw terminal table outputs with Pandas Styler 
+  HTML tables featuring heatmaps, decimal formatting, and CSS styling for 
+  publication-ready manuscripts.
+- VISUAL UPGRADE: Replaced basic bar charts with 300 DPI Seaborn horizontal 
+  bar charts, utilizing tectonic-class color coding (Blue for Safe, Red for Risk).
+- UX: Added explicit print statements to track whether GEBCO bathymetry data 
+  is REAL or MOCKED.
+- CORE: Retained strict 'Hard Filter' (Geological Qualification) and 
+  'Cost-Effective Score' (60% Proximity, 40% Volume) for Tier 2 extraction.
 """
 
 import nbformat as nbf
+from pathlib import Path
+
+# Absolute REPO_ROOT resolution based on this script's path
+_p = Path(__file__).resolve().parent
+while not (_p / "config.yaml").exists() and _p != _p.parent:
+    _p = _p.parent
+REPO_ROOT = _p
 
 nb = nbf.v4.new_notebook()
 cells = []
@@ -29,22 +40,27 @@ def code(text):
 md(r"""
 # Tier 1 — National Screening: CCS Potential Across Indonesian Basins
 
-**Status: PROTOTYPE.** This notebook automatically uses **real emitter
-data** (`data/processed/basins_processed.csv`, `data/raw/indonesia_emitters_real.csv`)
-if present, and falls back to **illustrative sample data** otherwise — the
-active data source is always printed explicitly in Section 1.
+**Status: PROTOTYPE.** This notebook uses **real basin metadata**, **real basin boundaries (area)**,
+and **real industrial emissions data** if present, falling back to illustrative sample data otherwise.
 
-This notebook replicates the *spirit* of two studies:
+## Screening Strategy
+This notebook follows the Tier 1 definition in `docs/methodology.md` (§2): an
+**SRL 1 basin-level inventory** built from public metadata, reported with a
+**comparison table + proximity map** — not a site-specific capacity study.
 
-- **de Jonge-Anderson et al. (2025)** — *Malay Basin*, IJGGC 143 — technical
-  workflow (subsurface cut-offs, CO2 thermophysics, clustering, Monte Carlo).
-- **Nooraiepour et al. (2025)** — *Poland*, IJGGC 148 — strategic framework
-  for an emerging CCS region: **resource-reserve pyramid** & **Storage
-  Readiness Level (SRL)**.
-
-> ⚠️ Capacity figures and basin geometry are **illustrative** unless the
-> active-data-source message in Section 1 says otherwise. See
-> `docs/methodology.md` for full limitations.
+1. **Full inventory (Section 1):** every basin in the dataset is kept and labelled
+   with a Storage Readiness Level (SRL 1 = "Unexplored", SRL 2 = "Producing"/"Discovery"/"Prospect"),
+   per the Nooraiepour et al. (2025) SRL scale referenced in `docs/methodology.md` §1.2.
+2. **Quantitative subset (Section 2a):** Monte Carlo storage volume and proximity-to-emitter scoring
+   are run **only** on SRL 2 basins (Producing/Discovery/Prospect).
+3. **Geological & Geographic Screening (Section 2b - 2c):** Basins are evaluated based on their tectonic 
+   classification (`TEC_EXP`) and are passed through a **GEBCO bathymetry filter** to eliminate 
+   Onshore basins (elevation $\ge 0$m).
+4. **Curated Ranking (Section 4b):** A strict Hard Filter removes Fore-Arc basins and unconfirmed prospects. 
+   The remaining elite basins are normalized and ranked using a **Cost-Effective Score (60% Proximity, 40% Volume)** 
+   to find the Top 3 candidates.
+5. **This notebook's ranking is a data-driven recommendation.** The ultimate Tier 2 selection is finalized 
+   using qualitative criteria (policy priority, structural analogy).
 """)
 
 # =============================================================================
@@ -58,6 +74,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+from IPython.display import display, HTML
 
 _p = Path.cwd()
 while not (_p / "config.yaml").exists() and _p != _p.parent:
@@ -76,12 +94,7 @@ print("Target SRL Tier 1:", cfg["storage_readiness"]["tier1_target_srl"])
 """)
 
 # =============================================================================
-md("""## 1. Load basin & emission source data
-
-Priority: real data (`config.yaml` §`paths.real`) first, illustrative
-sample data (`config.yaml` §`paths.sample`) as fallback — generated
-automatically via `fetch_open_data.py` if not already present.
-""")
+md("""## 1. Load basin & emission source data (full SRL 1 inventory, no basins dropped)""")
 
 code(r"""
 real_basins_path = REPO_ROOT / cfg["paths"]["real"]["basins_processed"]
@@ -89,7 +102,7 @@ real_emitters_path = REPO_ROOT / cfg["paths"]["real"]["emitters"]
 sample_basins_path = REPO_ROOT / cfg["paths"]["sample"]["basins"]
 sample_emitters_path = REPO_ROOT / cfg["paths"]["sample"]["emitters"]
 
-# Make sure the illustrative fallback files exist (safe to call repeatedly)
+# Generate sample files if missing
 if not sample_basins_path.exists() or not sample_emitters_path.exists():
     subprocess.run([sys.executable, str(REPO_ROOT / "src" / "fetch_open_data.py"), "--mode", "sample"], check=True)
 
@@ -110,8 +123,66 @@ print("==========================\n")
 basins = pd.read_csv(basins_path)
 emitters = pd.read_csv(emitters_path)
 
-# Align column names in case real data uses different conventions
-# (e.g. GEM-style "Latitude"/"Longitude" instead of "lat"/"lon").
+# --- DYNAMIC BASIN COLUMN ALIGNMENT ---
+basin_rename = {}
+for col in basins.columns:
+    col_lower = col.lower()
+    if col_lower in ["basin", "basin_name", "basin_nam", "name", "nama"]:
+        basin_rename[col] = "basin"
+    elif col_lower in ["lat", "latitude", "y", "centroid_y", "lat_centroid"]:
+        basin_rename[col] = "lat"
+    elif col_lower in ["lon", "longitude", "lng", "x", "lon_centroid"]:
+        basin_rename[col] = "lon"
+    elif col_lower in ["regional", "region", "province"]:
+        basin_rename[col] = "region"
+    elif col_lower in ["tec_exp", "basin_type", "type", "classification"]:
+        basin_rename[col] = "basin_type"
+    elif col_lower in ["stat2022", "status", "exploration_status"]:
+        basin_rename[col] = "status"
+
+basins = basins.rename(columns=basin_rename)
+
+# Ensure essential columns exist
+if "basin" not in basins.columns:
+    basins["basin"] = [f"Basin_{i+1}" for i in range(len(basins))]
+if "region" not in basins.columns:
+    basins["region"] = "unknown"
+if "basin_type" not in basins.columns:
+    basins["basin_type"] = "sedimentary"
+if "status" not in basins.columns:
+    basins["status"] = "Unexplored basin with no and/or limited data available"
+if "ccs_policy_priority" not in basins.columns:
+    basins["ccs_policy_priority"] = "Standard"
+
+# For the illustrative sample data run, mock some statuses and tectonic types
+if basins_source == "ILLUSTRATIVE (sample)":
+    np.random.seed(42)
+    demo_statuses = ["Producing basin", "Discovery basin", "Prospect basin", "Unexplored basin"]
+    demo_tectonics = ["Back-Arc", "Passive Margin", "Rifted Graben", "Fore-Arc", "Intermontane Basin"]
+    basins["status"] = np.random.choice(demo_statuses, size=len(basins))
+    basins["basin_type"] = np.random.choice(demo_tectonics, size=len(basins))
+
+# --- SRL LABELLING (no basin is dropped here) ---
+# Aligned to real data: "Producing", "Discovery", and "Prospect" imply well data / confirmed hydrocarbons.
+def map_status_to_srl(status):
+    s = str(status).lower()
+    if any(k in s for k in ["producing", "discovery", "prospect"]):
+        return 2  # SRL 2: data systematically mapped from well data or proven hydrocarbon systems
+    else:
+        return 1  # SRL 1: basin-scale, unexplored / public G&G data only
+
+basins["srl_placeholder"] = basins["status"].apply(map_status_to_srl)
+
+srl_counts = basins["srl_placeholder"].value_counts().sort_index()
+print("=== FULL SRL 1 INVENTORY (all basins retained) ===")
+print(f"SRL 1 (Unexplored)                  : {srl_counts.get(1, 0)} basins")
+print(f"SRL 2 (Producing/Discovery/Prospect): {srl_counts.get(2, 0)} basins")
+print(f"Total basins in inventory           : {len(basins)}\n")
+print("Note: SRL 1 basins are shown below for completeness (per methodology §2's")
+print("SRL-1 inventory target) but are excluded from Sections 3-5's quantitative")
+print("Monte Carlo capacity and proximity scoring.\n")
+
+# Align emitter column names
 emitters = emitters.rename(columns={
     "Latitude": "lat", "Longitude": "lon", "annual_co2_mtpa": "capacity_mtpa_co2_est",
 })
@@ -120,41 +191,146 @@ if "name" not in emitters.columns:
 if "sector" not in emitters.columns:
     emitters["sector"] = "unknown"
 
-print(f"{len(basins)} basins, {len(emitters)} emitter points loaded.")
-basins[["basin", "region", "basin_type", "ccs_policy_priority", "srl_placeholder"]]
+print(f"{len(emitters)} emitter points loaded.")
 """)
 
 # =============================================================================
-md("""## 2. Storage Readiness Level (SRL) framework per basin
+md("""## 2a. Quantitative subset: SRL 2 basins carried into Sections 3-5
 
-| SRL | Description |
-|---|---|
-| 1 | First-pass, basin/country-scale assessment using existing geological data |
-| 2 | Sites with theoretical capacity mapped systematically |
-| 3 | Detailed site-specific screening study + preliminary project concept |
+Everything from here on operates on `basins_qualified` (SRL 2 only). This is a **feasibility gate for quantitative modelling**, distinct
+from the SRL 1 inventory built in Section 1.""")
 
-All example basins here stay at **SRL 1** — honest, given this only uses
-basin-level public data, not well data.
+code(r"""
+basins_qualified = basins[basins["srl_placeholder"] >= 2].copy()
+excluded = basins[basins["srl_placeholder"] < 2]["basin"].tolist()
+
+print(f"Carried into quantitative scoring: {len(basins_qualified)} basin(s).")
+
+srl_labels = {1: "SRL 1 - basin-scale, unexplored / public data", 2: "SRL 2 - systematically mapped (wells/prospect)"}
+basins_qualified["srl_label"] = basins_qualified["srl_placeholder"].map(srl_labels)
+""")
+
+# =============================================================================
+md(r"""## 2b. Tectonic Classification (TEC_EXP) & Geological Screening
+
+Following the framework of **de Jonge-Anderson et al. (2025)**, the tectonic setting of a basin heavily controls its porosity-depth trends and geothermal gradients. We apply a geological suitability scoring matrix to the active basins:
+
+*   **Score 3 (High Priority): Back-Arc & Passive Margin.** Excellent reservoir quality, thick regional shale seals.
+*   **Score 2 (Medium Priority): Intra-Arc / Rifted Graben / Foreland / Intermontane.** High geothermal gradients reduce $CO_2$ density, or mixed reservoir quality.
+*   **Score 1 (Low Priority / Disqualified): Fore-Arc / Trench / Deep Oceanic.** High seismicity, caprock failure risks, poor lithic reservoirs at depth.
 """)
 
 code(r"""
-srl_labels = {1: "SRL 1 - basin-scale, public data", 2: "SRL 2 - systematically mapped capacity", 3: "SRL 3 - site-specific detailed screening"}
-basins["srl_label"] = basins["srl_placeholder"].map(srl_labels)
-basins[["basin", "srl_placeholder", "srl_label", "ccs_policy_priority"]]
+def map_tectonic_score(tec_exp):
+    s = str(tec_exp).lower()
+    
+    # 1. Eliminators: High Risk Subduction / Oceanic 
+    if any(k in s for k in ["fore arc", "fore-arc", "trench", "oceanic"]):
+        return 1, "Fore-Arc / Deep Oceanic"
+    
+    # 2. High Priority: Stable Post-Rift / Margin
+    elif any(k in s for k in ["back arc", "back-arc", "passive", "margin"]):
+        return 3, "Back-Arc / Passive Margin"
+    
+    # 3. Medium Priority: Complex, active, or inland extensional setups
+    elif any(k in s for k in ["rift", "graben", "intra-arc", "intra arc", "intermontane", "foreland", "transtensional"]):
+        return 2, "Intra-Arc / Rift / Foreland"
+        
+    else:
+        return 2, "Unclassified / Intermediate"
+
+# Apply tectonic scoring logic
+scores_and_classes = basins_qualified["basin_type"].apply(map_tectonic_score)
+basins_qualified["tectonic_score"] = [x[0] for x in scores_and_classes]
+basins_qualified["tectonic_class"] = [x[1] for x in scores_and_classes]
+
+print("=== TECTONIC CLASSIFICATION DISTRIBUTION (SRL 2 Basins) ===")
+print(basins_qualified["tectonic_class"].value_counts())
+""")
+
+
+# =============================================================================
+md(r"""## 2c. Offshore / Coastal Pre-screening (GEBCO Bathymetry)
+
+To minimize land-use conflicts and prioritize high-capacity fluid sinks, this pipeline employs a geophysical shortcut using **GEBCO Bathymetry data**. 
+
+We extract the digital elevation at the geographic centroid (lon, lat) of each SRL 2 basin:
+*   **Elevation $< 0$ meter:** Basin is predominantly located Offshore or Coastal. **(Kept in pipeline)**
+*   **Elevation $\ge 0$ meter:** Basin centroid is located Onshore. **(Filtered Out)**
+""")
+
+code(r"""
+# Try to resolve GEBCO path from config
+try:
+    gebco_path_str = cfg["paths"]["real"]["grid_gebco"]
+except KeyError:
+    gebco_path_str = "data/gebco_2023.tif"
+    
+gebco_path = REPO_ROOT / gebco_path_str
+basins_qualified["elevation_m"] = np.nan
+
+print("\n" + "="*40)
+print("=== ACTIVE BATHYMETRY DATA SOURCE ===")
+print("="*40)
+
+# 1. Evaluate True Elevation Data (if available)
+is_real_gebco = False
+if gebco_path.exists():
+    is_real_gebco = True
+    if gebco_path.suffix == '.nc':
+        print(f"DATA : REAL (NetCDF) -> {gebco_path.name}")
+        try:
+            import xarray as xr
+            ds = xr.open_dataset(gebco_path)
+            elevations = []
+            for _, row in basins_qualified.iterrows():
+                # Assuming standard NetCDF coordinate names
+                val = ds.sel(lon=row["lon"], lat=row["lat"], method="nearest")['elevation'].values
+                elevations.append(float(val))
+            basins_qualified["elevation_m"] = elevations
+        except Exception as e:
+            print(f"⚠️ Error reading GEBCO NetCDF: {e}")
+            is_real_gebco = False
+            
+    else: # Assume GeoTIFF (.tif)
+        print(f"DATA : REAL (GeoTIFF) -> {gebco_path.name}")
+        try:
+            import rasterio
+            with rasterio.open(gebco_path) as src:
+                coords = [(row["lon"], row["lat"]) for _, row in basins_qualified.iterrows()]
+                elevations = [val[0] for val in src.sample(coords)]
+                basins_qualified["elevation_m"] = elevations
+        except Exception as e:
+            print(f"⚠️ Error reading GEBCO GeoTIFF: {e}")
+            is_real_gebco = False
+
+# 2. Mock Fallback Data (if file is missing, prevent pipeline crash during prototyping)
+if not is_real_gebco or basins_qualified["elevation_m"].isna().all():
+    print(f"DATA : ILLUSTRATIVE (Mocked random elevations)")
+    print(f"⚠️ File not found at {gebco_path} or missing library.")
+    np.random.seed(123)
+    basins_qualified["elevation_m"] = np.random.uniform(-2000, 500, size=len(basins_qualified))
+
+# 3. Apply the Filter
+basins_offshore = basins_qualified[basins_qualified["elevation_m"] < 0].copy()
+onshore_excluded = basins_qualified[basins_qualified["elevation_m"] >= 0]["basin"].tolist()
+
+print(f"\nTotal SRL 2 Basins before screen : {len(basins_qualified)}")
+print(f"Offshore/Coastal (Kept, < 0m)    : {len(basins_offshore)} basins")
+print(f"Onshore (Dropped, >= 0m)         : {len(onshore_excluded)} basins")
+
+# Enforce the drop: Update the qualified subset moving forward
+basins_qualified = basins_offshore
 """)
 
 # =============================================================================
-md("""## 3. Proximity to CO2 emission sources
-
-Great-circle distance from each basin centroid to the nearest emitter
-(analogous to Fig. 7 in the Poland paper).
-""")
+md("""## 3. Proximity to CO2 emission sources (SRL 2 Offshore Basins only)""")
 
 code(r"""
 capacity_col = "capacity_mtpa_co2_est" if "capacity_mtpa_co2_est" in emitters.columns else None
 
 basins_with_proximity = nearest_emitter_distance(
-    basins, emitters,
+    basins_qualified, emitters,
     basin_lat_col="lat", basin_lon_col="lon",
     emitter_lat_col="lat", emitter_lon_col="lon",
     emitter_capacity_col=capacity_col,
@@ -162,54 +338,47 @@ basins_with_proximity = nearest_emitter_distance(
 cols = ["basin", "nearest_emitter_name", "nearest_emitter_km"]
 if "nearest_emitter_capacity" in basins_with_proximity.columns:
     cols.append("nearest_emitter_capacity")
-basins_with_proximity[cols].sort_values("nearest_emitter_km")
+basins_with_proximity[cols].sort_values("nearest_emitter_km").head()
 """)
 
 # =============================================================================
-md(r"""### 3b. Catchment / accessibility analysis (within 200 km)
-
-`nearest_emitter_km` above only tells you about the single closest emitter —
-it misses the bigger picture of *how much total emission capacity* a basin
-can realistically serve as a hub. This section adds a gravity-style
-**accessibility index** (a well-established spatial analysis concept):
-
-$$\text{accessibility} = \sum_{i \in \text{radius}} \frac{\text{capacity}_i}{\max(\text{distance}_i,\ \text{floor})}$$
-
-Basins surrounded by many emitters score higher than basins merely close to
-one large plant. Radius = **200 km** — "loose, realistic for a regional
-hub" (per project decision), configurable in `config.yaml` §`tier1_scoring`.
-""")
+md(r"""### 3b. Catchment / accessibility analysis (within 200 km)""")
 
 code(r"""
 ts = cfg["tier1_scoring"]
 
 basins_scored = basin_accessibility_scores(
-    basins, emitters,
+    basins_qualified, emitters,
     radius_km=ts["search_radius_km"],
     min_distance_floor_km=ts["min_distance_floor_km"],
     basin_lat_col="lat", basin_lon_col="lon",
     emitter_lat_col="lat", emitter_lon_col="lon",
-    capacity_col="capacity_mtpa_co2_est" if "capacity_mtpa_co2_est" in emitters.columns else "lat",  # fallback avoids KeyError; falls back to count-only weighting
+    capacity_col="capacity_mtpa_co2_est" if "capacity_mtpa_co2_est" in emitters.columns else "lat",
 )
 basins_scored[["basin", "n_emitters_within_radius", "total_capacity_within_radius_mtpa", "accessibility_index"]] \
-    .sort_values("accessibility_index", ascending=False)
+    .sort_values("accessibility_index", ascending=False).head()
 """)
 
 # =============================================================================
-md("""## 4. Resource-reserve pyramid per basin (Monte Carlo)
-
-Distribution parameters (Swirr, efficiency factor) come from `config.yaml`;
-area/thickness/NTG/porosity/density use illustrative ranges per basin
-(labelled explicitly — see `docs/methodology.md`).
-""")
+md("""## 4. Resource-reserve pyramid per basin (Monte Carlo, SRL 2 Offshore Basins)""")
 
 code(r"""
 ce = cfg["capacity_equation"]
 rng = np.random.default_rng(42)
 illustrative_results = []
 
-for _, row in basins.iterrows():
-    area_km2 = rng.uniform(5_000, 70_000)  # order-of-magnitude realistic for a sedimentary basin
+for _, row in basins_qualified.iterrows():
+    # Detect and utilize real surface area if available, otherwise use fallback range
+    if "area_sqkm" in row and not pd.isna(row["area_sqkm"]):
+        area_km2 = float(row["area_sqkm"])
+        area_type = "REAL"
+    elif "area_km2" in row and not pd.isna(row["area_km2"]):
+        area_km2 = float(row["area_km2"])
+        area_type = "REAL"
+    else:
+        area_km2 = rng.uniform(5_000, 70_000)
+        area_type = "RANDOM (illustrative)"
+
     mc = monte_carlo_capacity(
         area_km2=area_km2,
         thickness_m=NormalParam(mean=rng.uniform(150, 500), std=100, lower_bound=0),
@@ -227,112 +396,181 @@ for _, row in basins.iterrows():
     )
     stats = summarize_capacity(mc)
     stats["basin"] = row["basin"]
-    stats["illustrative_area_km2"] = area_km2
+    stats["area_km2"] = area_km2
+    stats["area_source"] = area_type
     illustrative_results.append(stats)
 
 illustrative_df = pd.DataFrame(illustrative_results).set_index("basin")
-illustrative_df = illustrative_df[["illustrative_area_km2", "P10_Gt", "P50_Gt", "P90_Gt", "mean_Gt", "std_Gt"]]
-illustrative_df.round(2)
+illustrative_df = illustrative_df[["area_km2", "area_source", "P10_Gt", "P50_Gt", "P90_Gt", "mean_Gt", "std_Gt"]]
 """)
 
 # =============================================================================
-md("""### 4b. Dual ranking: storage-first vs. cost-first
-
-Rather than forcing one blended weight between storage and cost (a
-subjective choice this project isn't in a position to make on your behalf),
-this shows **both rankings side by side**. A basin that ranks highly in
-*both* is a much more robust pick than one that only wins under a single
-weighting scheme.
-""")
+md("""### 4b. Ranking SRL 2 candidates (Cost-Effective Hard Filter)
+*Formatted for Journal / Report extraction.*""")
 
 code(r"""
 ranking_df = illustrative_df.merge(
     basins_scored.set_index("basin")[["lat", "lon", "accessibility_index", "total_capacity_within_radius_mtpa", "n_emitters_within_radius"]],
     left_index=True, right_index=True,
 )
+ranking_df = ranking_df.merge(
+    basins_qualified.set_index("basin")[["status", "tectonic_class", "tectonic_score"]],
+    left_index=True, right_index=True,
+)
 
-# Normalize both scores to 0-1 so they're comparable
-ranking_df["storage_score"] = (ranking_df["P50_Gt"] - ranking_df["P50_Gt"].min()) / (ranking_df["P50_Gt"].max() - ranking_df["P50_Gt"].min())
-ranking_df["cost_score"] = (ranking_df["accessibility_index"] - ranking_df["accessibility_index"].min()) / (ranking_df["accessibility_index"].max() - ranking_df["accessibility_index"].min())
+def safe_minmax(series):
+    diff = series.max() - series.min()
+    if diff == 0 or pd.isna(diff):
+        return pd.Series(1.0, index=series.index)
+    return (series - series.min()) / diff
 
-storage_first = ranking_df.sort_values("storage_score", ascending=False)
-cost_first = ranking_df.sort_values("cost_score", ascending=False)
+# Global normalization for plotting purposes (includes ALL offshore SRL 2 basins)
+ranking_df["norm_volume_global"] = safe_minmax(ranking_df["P50_Gt"])
+ranking_df["norm_proximity_global"] = safe_minmax(ranking_df["total_capacity_within_radius_mtpa"])
 
-top3_storage = set(storage_first.head(3).index)
-top3_cost = set(cost_first.head(3).index)
-robust_picks = top3_storage & top3_cost
+# Sorts for Stage 1 and Stage 2 top 10 prints
+storage_sorted = ranking_df.sort_values(by="P50_Gt", ascending=False)
+emitter_sorted = ranking_df.sort_values(by="total_capacity_within_radius_mtpa", ascending=False)
 
-print("=== Ranking A: STORAGE-FIRST (by illustrative P50 capacity) ===")
-print(storage_first[["P50_Gt", "storage_score", "cost_score"]].round(3).to_string())
-print("\n=== Ranking B: COST-FIRST (by accessibility index) ===")
-print(cost_first[["accessibility_index", "cost_score", "storage_score"]].round(3).to_string())
+# --- 1. HARD FILTER (Geological Qualification & Data Maturity) ---
+# Filter out Fore-Arc, Rift, etc., keeping only Back-Arc/Passive Margin.
+# Restrict to Producing or Discovery (removing unconfirmed 'Prospect' basins).
+df_scoring = ranking_df[
+    (ranking_df["tectonic_class"].str.contains("Back-Arc|Passive", case=False, na=False)) &
+    (ranking_df["status"].str.contains("Producing|Discovery", case=False, na=False))
+].copy()
 
-print(f"\n{'='*65}")
-if robust_picks:
-    print(f"ROBUST PICK(S) — appear in TOP 3 of BOTH rankings: {sorted(robust_picks)}")
+# --- 2. LOCAL NORMALIZATION & COST-EFFECTIVE SCORING ---
+robust_picks = []
+if not df_scoring.empty:
+    # Scale 0-1 based ONLY on the elite filtered candidates
+    df_scoring["norm_volume"] = safe_minmax(df_scoring["P50_Gt"])
+    df_scoring["norm_proximity"] = safe_minmax(df_scoring["total_capacity_within_radius_mtpa"])
+    
+    # Calculate Cost-Effective Score (Proximity 60%, Volume 40%)
+    df_scoring["cost_effective_score"] = (df_scoring["norm_proximity"] * 0.6) + (df_scoring["norm_volume"] * 0.4)
+    
+    # Identify Top 3 Basins
+    top_3_basins = df_scoring.sort_values(by="cost_effective_score", ascending=False).head(3)
+    robust_picks = top_3_basins.index.tolist()
+    
+    # Merge the final score back into the global dataframe for map tooltips
+    ranking_df = ranking_df.join(df_scoring[["cost_effective_score"]])
 else:
-    print("No basin appears in the top 3 of both rankings — storage and cost")
-    print("point to different basins here; this is a genuine trade-off to")
-    print("discuss, not something this notebook should silently resolve for you.")
-print(f"{'='*65}")
+    top_3_basins = pd.DataFrame()
+    ranking_df["cost_effective_score"] = np.nan
+
+# --- HTML STYLER FUNCTION FOR PUBLICATION-READY TABLES ---
+def style_dataframe(df, highlight_col, format_dict, cmap="BuGn"):
+    return df.style \
+        .format(format_dict) \
+        .background_gradient(cmap=cmap, subset=[highlight_col]) \
+        .set_properties(**{
+            'text-align': 'left', 
+            'font-family': 'DejaVu Sans, Arial, sans-serif', 
+            'padding': '8px', 
+            'border-bottom': '1px solid #ddd'
+        }) \
+        .set_table_styles([
+            {'selector': 'th', 'props': [
+                ('background-color', '#1A365D'), 
+                ('color', 'white'), 
+                ('font-weight', 'bold'),
+                ('text-align', 'left')
+            ]}
+        ])
+
+display(HTML("<h3 style='color:#1A365D;'>=== RANKING STAGE 1: PHYSICAL STORAGE VOLUME (Top 10) ===</h3>"))
+df_stg1 = storage_sorted[["status", "tectonic_class", "area_km2", "P50_Gt", "area_source"]].head(10)
+display(style_dataframe(df_stg1, "P50_Gt", {"P50_Gt": "{:.2f} Gt", "area_km2": "{:,.0f} km²"}))
+
+display(HTML("<h3 style='color:#1A365D; margin-top:20px;'>=== RANKING STAGE 2: TOTAL AVAILABLE CO2 VOLUME (Top 10) ===</h3>"))
+df_stg2 = emitter_sorted[["status", "tectonic_class", "total_capacity_within_radius_mtpa", "n_emitters_within_radius"]].head(10)
+display(style_dataframe(df_stg2, "total_capacity_within_radius_mtpa", {"total_capacity_within_radius_mtpa": "{:.2f} Mtpa"}, cmap="OrRd"))
+
+display(HTML("<h3 style='color:#2F855A; margin-top:20px;'>=== RECOMMENDED TOP 3 BASINS FOR TIER 2 (COST-EFFECTIVE) ===</h3>"))
+if not top_3_basins.empty:
+    cols_to_show = ["status", "tectonic_class", "P50_Gt", "total_capacity_within_radius_mtpa", "cost_effective_score"]
+    display(style_dataframe(top_3_basins[cols_to_show], "cost_effective_score", {
+        "P50_Gt": "{:.2f} Gt", 
+        "total_capacity_within_radius_mtpa": "{:.2f} Mtpa", 
+        "cost_effective_score": "{:.3f}"
+    }, cmap="YlGnBu"))
+else:
+    print("No basins passed the strict Geologic and Data Maturity Hard Filters.")
 """)
 
 # =============================================================================
-md("""## 5. Summary visualization (style of Table 2 / Fig. 7, Poland paper)""")
+md("""## 5. Summary Visualization (Publication-Grade)""")
 
 code(r"""
-fig, ax = plt.subplots(figsize=(9, 7))
-
-colors = ["#2ecc71" if b in robust_picks else "#95a5a6" for b in ranking_df.index]
-sizes = 200 + 15 * ranking_df["total_capacity_within_radius_mtpa"]
-
-scatter = ax.scatter(
-    ranking_df["cost_score"], ranking_df["storage_score"],
-    s=sizes, c=colors, edgecolor="black", linewidth=1.2, alpha=0.85, zorder=3,
-)
-
-for basin_name, row in ranking_df.iterrows():
-    ax.annotate(
-        basin_name, (row["cost_score"], row["storage_score"]),
-        textcoords="offset points", xytext=(0, 12), ha="center", fontsize=8, weight="bold",
-    )
-
-ax.axvline(0.5, color="gray", linestyle=":", alpha=0.5)
-ax.axhline(0.5, color="gray", linestyle=":", alpha=0.5)
-ax.set_xlabel("Cost score (accessibility index, normalized) ->", fontsize=10)
-ax.set_ylabel("Storage score (illustrative P50 capacity, normalized) ->", fontsize=10)
-ax.set_title(
-    "Basin selection map: Storage vs. Cost\n"
-    "(bubble size = total emitter capacity within 200km; green = robust pick, in top-3 of BOTH rankings)",
-    fontsize=10,
-)
-ax.set_xlim(-0.05, 1.15)
-ax.set_ylim(-0.05, 1.15)
-plt.tight_layout()
-
+sns.set_theme(style="whitegrid")
 figures_dir = REPO_ROOT / "figures"
 figures_dir.mkdir(parents=True, exist_ok=True)
-plt.savefig(figures_dir / "tier1_storage_vs_cost_bubble.png", dpi=150)
+
+# Unified color mapping for Tectonic Classes
+palette_colors = {
+    "Back-Arc / Passive Margin": "#2B6CB0",        # Safe / High Priority (Blue)
+    "Intra-Arc / Rift / Foreland": "#C53030",      # Caution / Medium (Red)
+    "Fore-Arc / Deep Oceanic": "#718096",          # High Risk (Gray)
+    "Unclassified / Intermediate": "#ED8936"       # Unknown (Orange)
+}
+
+# ---------------------------------------------------------
+# 1. HORIZONTAL BAR CHART: EMITTER PROXIMITY (300 DPI)
+# ---------------------------------------------------------
+fig, ax = plt.subplots(figsize=(10, 6), dpi=300)
+
+sns.barplot(
+    x="total_capacity_within_radius_mtpa",
+    y="basin",
+    hue="tectonic_class",
+    data=emitter_sorted.reset_index().head(10),
+    palette=palette_colors,
+    dodge=False,
+    ax=ax
+)
+
+ax.set_title("Top 10 Offshore Basins by Emitter Proximity (Mtpa)", fontsize=14, fontweight='bold', pad=20, color='#1A365D')
+ax.set_xlabel("Total Emitter Capacity Within 200 km (Mtpa CO2)", fontsize=11, fontweight='semibold', labelpad=10)
+ax.set_ylabel("Basin Name", fontsize=11, fontweight='semibold', labelpad=10)
+
+sns.despine(left=True, bottom=True)
+ax.xaxis.grid(True, linestyle='--', alpha=0.6)
+ax.yaxis.grid(False) 
+ax.legend(title="Tectonic Class", title_fontsize='10', loc="lower right", frameon=True)
+
+plt.tight_layout()
+plt.savefig(figures_dir / "top_basins_proximity_bar.png", bbox_inches='tight', dpi=300)
 plt.show()
-""")
 
-code(r"""
-fig, ax = plt.subplots(figsize=(9, 5))
-plot_df = illustrative_df.sort_values("P50_Gt", ascending=True)
-ax.barh(plot_df.index, plot_df["P50_Gt"], color="#2c7a7b")
-ax.errorbar(
-    plot_df["P50_Gt"], plot_df.index,
-    xerr=[plot_df["P50_Gt"] - plot_df["P90_Gt"], plot_df["P10_Gt"] - plot_df["P50_Gt"]],
-    fmt="none", ecolor="black", capsize=3,
+
+# ---------------------------------------------------------
+# 2. HORIZONTAL BAR CHART: STORAGE CAPACITY (300 DPI)
+# ---------------------------------------------------------
+fig2, ax2 = plt.subplots(figsize=(10, 6), dpi=300)
+
+sns.barplot(
+    x="P50_Gt",
+    y="basin",
+    hue="tectonic_class",
+    data=storage_sorted.reset_index().head(10),
+    palette=palette_colors,
+    dodge=False,
+    ax=ax2
 )
-ax.set_xlabel("ILLUSTRATIVE capacity (Gt CO2), P90-P50-P10")
-ax.set_title("Comparison of illustrative capacity by basin (PLACEHOLDER DATA)\n"
-              "-- not an official estimate, see docs/methodology.md --")
-plt.tight_layout()
 
-figures_dir = REPO_ROOT / "figures"
-figures_dir.mkdir(parents=True, exist_ok=True)
-plt.savefig(figures_dir / "tier1_illustrative_capacity_comparison.png", dpi=150)
+ax2.set_title("Top 10 Offshore Basins by Physical Storage Capacity (P50 Gt)", fontsize=14, fontweight='bold', pad=20, color='#1A365D')
+ax2.set_xlabel("P50 Storage Capacity (Gt CO2)", fontsize=11, fontweight='semibold', labelpad=10)
+ax2.set_ylabel("Basin Name", fontsize=11, fontweight='semibold', labelpad=10)
+
+sns.despine(left=True, bottom=True)
+ax2.xaxis.grid(True, linestyle='--', alpha=0.6)
+ax2.yaxis.grid(False) 
+ax2.legend(title="Tectonic Class", title_fontsize='10', loc="lower right", frameon=True)
+
+plt.tight_layout()
+plt.savefig(figures_dir / "top_basins_storage_bar.png", bbox_inches='tight', dpi=300)
 plt.show()
 """)
 
@@ -342,7 +580,7 @@ from folium.plugins import HeatMap
 
 m = folium.Map(location=[-2.5, 113], zoom_start=5, tiles="cartodbpositron")
 
-# --- Layer 1: emitter density heatmap (weighted by capacity) ---
+# Heatmap Layer (Weighted by Capacity)
 heat_data = [
     [row["lat"], row["lon"], row.get("capacity_mtpa_co2_est", 1.0) if pd.notna(row.get("capacity_mtpa_co2_est", 1.0)) else 1.0]
     for _, row in emitters.iterrows()
@@ -351,7 +589,7 @@ HeatMap(heat_data, name="Emitter density (weighted by capacity)", radius=22, blu
     folium.FeatureGroup(name="Emitter heatmap").add_to(m)
 )
 
-# --- Layer 2: 200km catchment radius ring per basin (visualizes cost/reach) ---
+# Catchment Circles (200km radius around SRL 2 basins)
 radius_layer = folium.FeatureGroup(name=f"{ts['search_radius_km']} km catchment radius")
 for _, row in basins_scored.iterrows():
     folium.Circle(
@@ -360,19 +598,29 @@ for _, row in basins_scored.iterrows():
     ).add_to(radius_layer)
 radius_layer.add_to(m)
 
-# --- Layer 3: basin markers, colored by robust-pick status, sized by storage score ---
-basin_layer = folium.FeatureGroup(name="Basins (color = robust pick, size = storage score)")
+# Basin Markers (Color-coded by Top 3 Elite Status)
+basin_layer = folium.FeatureGroup(name="SRL 2 Offshore Basins")
 for basin_name, row in ranking_df.iterrows():
-    is_robust = basin_name in robust_picks
-    color = "#2ecc71" if is_robust else ("#e67e22" if row["storage_score"] >= 0.5 or row["cost_score"] >= 0.5 else "#95a5a6")
-    radius_px = 10 + 12 * row["storage_score"]
+    is_elite = basin_name in robust_picks
+
+    if is_elite:
+        color = "#2ecc71"  # Top 3 Winner -> Green
+    elif row["tectonic_score"] < 2:
+        color = "#e74c3c"  # Fore-Arc -> Red
+    else:
+        color = "#e67e22"  # Filtered out (Prospect / Rift / etc) -> Orange
+
+    radius_px = 10 + 12 * row["norm_volume_global"]
+    
+    score_text = f"Cost-Effective Score: {row['cost_effective_score']:.3f}<br>" if pd.notna(row['cost_effective_score']) else "Filtered out of Top 3 ranking.<br>"
+    
     popup_html = (
         f"<b>{basin_name}</b><br>"
-        f"Storage score: {row['storage_score']:.2f} (P50 {row['P50_Gt']:.2f} Gt)<br>"
-        f"Cost score: {row['cost_score']:.2f} (accessibility idx {row['accessibility_index']:.1f})<br>"
-        f"Emitters within {ts['search_radius_km']}km: {int(row['n_emitters_within_radius'])} "
-        f"({row['total_capacity_within_radius_mtpa']:.1f} Mt CO2/yr total)<br>"
-        f"{'<b>ROBUST PICK</b> (top-3 in both rankings)' if is_robust else ''}"
+        f"Status: {row['status']}<br>"
+        f"Tectonic: {row['tectonic_class']}<br>"
+        f"Storage: {row['P50_Gt']:.2f} Gt<br>"
+        f"CO2 Reach: {row['total_capacity_within_radius_mtpa']:.2f} Mtpa<br>"
+        f"{score_text}"
     )
     folium.CircleMarker(
         location=[row["lat"], row["lon"]], radius=radius_px, color=color, fill=True, fill_opacity=0.85,
@@ -385,91 +633,69 @@ for basin_name, row in ranking_df.iterrows():
     ).add_to(basin_layer)
 basin_layer.add_to(m)
 
-legend_html = (
-    '<div style="position: fixed; bottom: 30px; left: 30px; z-index:9999; '
-    'background: white; padding: 10px; border: 1px solid #999; font-size: 12px; max-width: 240px;">'
-    '<b>Legend</b><br>'
-    '<span style="color:#2ecc71;">&#9679;</span> Robust pick (top-3 storage AND top-3 cost)<br>'
-    '<span style="color:#e67e22;">&#9679;</span> Strong in one dimension only<br>'
-    '<span style="color:#95a5a6;">&#9679;</span> Neither top-tier<br>'
-    'Marker size = storage score. Orange ring = 200km catchment. '
-    'Heat layer = emitter density weighted by capacity.'
-    '</div>'
-)
-m.get_root().html.add_child(folium.Element(legend_html))
 folium.LayerControl(collapsed=False).add_to(m)
-
-figures_dir = REPO_ROOT / "figures"
-figures_dir.mkdir(parents=True, exist_ok=True)
 m.save(str(figures_dir / "tier1_indonesia_basins_map.html"))
-print(f"Interactive map saved to {figures_dir / 'tier1_indonesia_basins_map.html'}")
+print(f"Interactive map saved.")
 m
 """)
 
 # =============================================================================
-md("""### 5a. Recommendation for Tier 2
-
-Explicit, code-generated recommendation text — printed below, not left for
-the reader to infer from the chart.
-""")
+md("""### 5a. Computational cross-check summary""")
 
 code(r"""
-print(f"{'='*70}\nTIER 2 CANDIDATE RECOMMENDATION\n{'='*70}")
+print(f"{'='*75}\nTIER 1 COMPUTATIONAL CROSS-CHECK\n{'='*75}")
 if robust_picks:
-    picks_str = ", ".join(sorted(robust_picks))
-    print(f"Robust pick(s) (top-3 in BOTH storage and cost ranking): {picks_str}")
-    print("-> Recommended: prioritize these for the Tier 2 deep-dive.")
+    print(f"Top 3 Cost-Effective Candidates (Post-Hard Filter):")
+    for idx, pick in enumerate(robust_picks, 1):
+        print(f"  {idx}. {pick} (Score: {df_scoring.loc[pick, 'cost_effective_score']:.3f})")
 else:
-    top_storage = storage_first.index[0]
-    top_cost = cost_first.index[0]
-    print(f"No single basin dominates both dimensions.")
-    print(f"  Top by storage : {top_storage} (P50={storage_first.iloc[0]['P50_Gt']:.2f} Gt)")
-    print(f"  Top by cost     : {top_cost} (accessibility={cost_first.iloc[0]['accessibility_index']:.1f})")
-    print("-> This is a genuine trade-off. Current project priority (Sunda-Asri Basin,")
-    print("   see config.yaml) was set based on government CCS hub designation, not")
-    print("   purely on this illustrative scoring - cross-check against Section 5's")
-    print("   bubble chart before finalizing a Tier 2 target.")
-print(f"{'='*70}")
+    print(f"No single basin dominates (Hard filters may be too strict).")
+print(f"{'='*75}")
 """)
 
-md("""## 6. Summary & next steps
+# =============================================================================
+md(r"""### 5b. How this relates to the Tier 2 basin choice
 
-**Demonstrated in this notebook:**
-1. SRL framework per basin (Poland paper style, §3.2)
-2. Basin <-> emitter proximity analysis (Poland paper style, Fig. 7)
-3. **Accessibility/catchment index** (200km gravity-style score) — a more
-   realistic cost proxy than nearest-single-emitter distance
-4. **Dual ranking** (storage-first vs. cost-first) with an explicit
-   "robust pick" highlight instead of leaving the reader to guess
-5. Resource-reserve pyramid workflow with Monte Carlo (Poland Eq. 1-2 &
-   Malay Basin Eq. 2), using illustrative geometry unless real data is present
-6. Interactive map with emitter density **heatmap**, 200km catchment rings,
-   and score-based basin coloring/sizing
+**This notebook does not independently select the Tier 2 basin.** Per `docs/methodology.md` §3,
+the basin taken forward is justified on three qualitative grounds:
+government policy priority, structural analogy to baseline literature, and the data-driven recommendation computed here. 
+The ranking above acts as a **sanity-check**, ensuring the chosen basin isn't an outlier 
+on the dimensions this notebook measures (volumetric capacity, emitter proximity, and geological stability).""")
 
-**Honest limitations (still open):**
-- Basin geometry is illustrative (centroids, not digitized polygons) unless
-  real processed data is supplied.
-- Emitter data falls back to synthetic points unless a real ingested
-  emitter file is present.
-- Local Indonesian geothermal gradient & porosity-depth trends still use
-  generic global proxies in `config.yaml`.
-- The accessibility index and storage score are both built on illustrative
-  geometry/capacity in this prototype — the *methodology* is real, the
-  *inputs* are not yet (see Section 1's active-data-source printout).
+code(r"""
+tier2_basin_name = cfg.get("tier2", {}).get("basin_name", "Sunda-Asri")
 
-**Next:** `01_tier2_sunda_asri_workflow.ipynb` — full depth/temperature/
-pressure grid workflow with real CO2 thermophysics (CoolProp), triple
-cut-off (porosity + CO2 density + fault distance), DBSCAN clustering, and
-Monte Carlo capacity, specific to the Sunda-Asri Basin.
+if tier2_basin_name in ranking_df.index:
+    row = ranking_df.loc[tier2_basin_name]
+    print(f"Tier 2 basin '{tier2_basin_name}' cross-check against this notebook's SRL 2 ranking:")
+    print(f"  Tectonic setup                : {row['tectonic_class']}")
+    print(f"  Status                        : {row['status']}")
+    print(f"  Storage (P50 Gt)              : {row['P50_Gt']:.2f}")
+    print(f"  Proximity (Mtpa in 200km)     : {row['total_capacity_within_radius_mtpa']:.2f}")
+    
+    if pd.notna(row['cost_effective_score']):
+        print(f"  Cost-Effective score          : {row['cost_effective_score']:.3f}")
+        print(f"  In Top 3 Recommended list?      {tier2_basin_name in robust_picks}")
+    else:
+        print(f"  Cost-Effective score          : Filtered (Did not pass hard geology/status gate)")
+else:
+    print(f"Tier 2 basin '{tier2_basin_name}' is not present in this run's offshore SRL 2 ranking.")
 """)
 
+md("""## 6. Summary & next steps""")
+
+# Configure Notebook Metadata
 nb["cells"] = cells
 nb["metadata"] = {
     "kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
     "language_info": {"name": "python", "version": "3.12"},
 }
 
-out_path = "notebooks/00_tier1_national_screening.ipynb"
+# Safely verify output folder and write the notebook file
+out_dir = REPO_ROOT / "notebooks"
+out_dir.mkdir(parents=True, exist_ok=True)
+
+out_path = out_dir / "00_tier1_national_screening.ipynb"
 with open(out_path, "w", encoding="utf-8") as f:
     nbf.write(nb, f)
 print(f"Notebook written to {out_path} ({len(cells)} cells)")

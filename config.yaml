@@ -32,8 +32,8 @@ paths:
     grid_gebco: "data/raw/gebco_2026_n-4.0_s-6.0_w105.5_e108.0.nc"
     grid_globsed: "data/raw/GlobSed-v3.nc"
     heat_flow_db: "data/raw/IHFC_2024_GHFDB_v.2026.03.txt"
-    sunda_asri_boundary: "data/processed/sunda_asri_boundary_digitized.csv"
-    sunda_asri_faults: "data/processed/sunda_asri_faults_digitized.csv"
+    sunda_asri_boundary: "data/processed/sunda_asri_boundary.csv"
+    sunda_asri_faults: "data/processed/sunda_asri_faults.csv"
 
 # -----------------------------------------------------------------------------
 # Optimal zone cut-offs (subsurface screening) — default values mimic [MB] §4.5.1

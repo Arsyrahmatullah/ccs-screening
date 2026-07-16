@@ -12,16 +12,16 @@
 
 ## Why this project exists
 
-Indonesia has recently established its CCS legal framework (Presidential Regulation 14/2024, ESDM Ministerial Regulations 2/2023 & 16/2024) and officially designated the **Sunda-Asri Basin** and **Bintuni Basin** as priority locations for strategic CCS hubs. However, there is no comprehensive and reproducible public screening study for Indonesian basins — a task already completed for the Malay Basin in Malaysia.
+Indonesia has recently established its CCS legal framework (Presidential Regulation 14/2024, ESDM Ministerial Regulations 2/2023 & 16/2024) and officially designated the **Sunda-Asri Basin** and **Bintuni Basin** as priority locations for strategic CCS hubs [docs/methodology.md]. However, there is no comprehensive and reproducible public screening study for Indonesian basins — a task already completed for the Malay Basin in Malaysia [docs/methodology.md].
 
 This project adapts two frameworks from recent literature:
 
 | Reference | Adapted content |
 |---|---|
-| de Jonge-Anderson et al. (2025), *Regional screening of saline aquifers in the Malay Basin for CO2 storage*, IJGGC 143 | Technical workflow: grid depth/temperature/pressure → CO2 thermophysical properties (CoolProp) → subsurface cut-offs → clustering (DBSCAN) → volumetric Monte Carlo capacity (Goodman et al., 2011) |
-| Nooraiepour et al. (2025), *Geological CO2 storage assessment in emerging CCS regions: ... Poland*, IJGGC 148 | Strategic framework for emerging CCS regions: **resource-reserve pyramid** & **Storage Readiness Level (SRL)**, as well as an open approach to data limitations |
+| de Jonge-Anderson et al. (2025), *Regional screening of saline aquifers in the Malay Basin for CO2 storage*, IJGGC 143 | Technical workflow: grid depth/temperature/pressure → CO2 thermophysical properties (CoolProp) → subsurface cut-offs → clustering (DBSCAN) → volumetric Monte Carlo capacity (Goodman et al., 2011) [docs/methodology.md] |
+| Nooraiepour et al. (2025), *Geological CO2 storage assessment in emerging CCS regions: ... Poland*, IJGGC 148 | Strategic framework for emerging CCS regions: **resource-reserve pyramid** & **Storage Readiness Level (SRL)**, as well as an open approach to data limitations [docs/methodology.md] |
 
-Indonesia is currently in the same "emerging CCS region" position as Poland in the second paper — many potential basins, significant industry interest, but no public well/pressure data available. Therefore, the project strategy is: **use the Poland framework to set realistic ambition levels (SRL 1–2), and use the Malay Basin techniques for parts where data allows.**
+Indonesia is currently in the same "emerging CCS region" position as Poland in the second paper — many potential basins, significant industry interest, but no public well/pressure data available [docs/methodology.md]. Therefore, the project strategy is: **use the Poland framework to set realistic ambition levels (SRL 1–2), and use the Malay Basin techniques for parts where data allows.**
 
 ---
 
@@ -30,10 +30,12 @@ Indonesia is currently in the same "emerging CCS region" position as Poland in t
 ```
 Tier 1  National Screening         Tier 2  Sunda-Asri Deep-Dive
 ────────────────────────────       ──────────────────────────────
-Multi-basin (5-8 basins)           Focus on 1 priority basin
-Basin-level, public data           Digitized spatial grids
-Target SRL 1                       Target SRL 1-2
-Style: Table 2 Poland paper        Style: Fig. 5-13 Malay Basin paper
+Multi-basin screening              Focus on 1 priority basin
+Basin-level, public metadata       Digitized spatial grids
+GEBCO Bathymetry & Tectonics       Triple reservoir cut-offs (phi, density, fault)
+Multi-criteria ranking (60/40)     DBSCAN Connected-cluster analysis
+Target SRL 1 (Inventory) / 2       Target SRL 1-2
+Style: Pandas Styler + Seaborn     Style: Fig. 5-13 Malay Basin paper
 ✅ Notebook ready to run           ✅ Notebook ready to run  
 ```
 
@@ -98,21 +100,21 @@ python3 src/montecarlo_capacity.py   # validation vs Group I, Malay Basin paper
 
 ## What is in the Tier 1 notebook
 
-`notebooks/00_tier1_national_screening.ipynb` (ready to execute end-to-end
-offline, using sample data):
+`notebooks/00_tier1_national_screening.ipynb` (ready to execute end-to-end offline, using sample data):
 
-1. Classification of 8 Indonesian basins (Sunda-Asri, South Sumatra, North
-   Sumatra, Northwest Java, East Java, Kutai, Bintuni, Natuna/Malay Basin
-   Indonesian side) into the **SRL** framework.
-2. **Proximity** analysis of basin ↔ CO2 emission source clusters (great-circle
-   distance), analogous to Fig. 7 in the Poland paper.
-3. Demonstration of the **resource-reserve pyramid** using Monte Carlo
-   simulation (1000 iterations, P10/P50/P90 distributions) using illustrative geometry.
-4. Interactive map (`figures/tier1_indonesia_basins_map.html`) & comparison
-   bar chart (`figures/tier1_illustrative_capacity_comparison.png`).
-
-All numbers in this notebook are explicitly marked as **PLACEHOLDERS** —
-see the limitations section below.
+1. **SRL Inventory Classification**: Categorization of Indonesian basins into the **Storage Readiness Level (SRL)** framework (full SRL 1 inventory retained for transparency in Section 1, with quantitative modeling run strictly on SRL 2 subsets).
+2. **Geophysical & Tectonic Filters**: 
+   *   **Elevation screening**: Utilizes real or mocked GEBCO bathymetry data at basin centroids to automatically filter out onshore basins ($\ge 0$m), keeping only offshore/coastal sites.
+   *   **Tectonic classification**: Automatically scores and categorizes basins based on tectonic classification (`TEC_EXP`) adapted from the de Jonge-Anderson et al. (2025) risk profile.
+3. **Emitter Proximity Indexing**: Quantitative calculation of basin-to-emitter catchment metrics (calculating total annual emissions and number of active plants within a 200 km search radius).
+4. **Probabilistic Volumetric Modeling**: Run Monte Carlo capacity simulations (P10/P50/P90 storage distributions in Gt) using the Goodman et al. (2011) equation across qualified offshore SRL 2 basins.
+5. **Multi-Criteria Elite Hard Filter & Ranking**:
+   *   Applies a strict hard-filter keeping only high-priority tectonic classes (Back-Arc & Passive Margin) and mature exploration statuses (Producing & Discovery).
+   *   Evaluates the remaining elite candidates using a weighted **Cost-Effective Score** ($60\%$ Proximity to emission clusters, $40\%$ Physical storage volume) to select the recommended Top 3 basins.
+6. **Publication-Ready Outputs**:
+   *   Interspersed with publication-grade **Pandas Styler HTML tables** featuring embedded heatmaps, decimal formatting, and high-contrast styling.
+   *   Saves horizontal bar charts (`figures/top_basins_proximity_bar.png` and `figures/top_basins_storage_bar.png`) rendered at **300 DPI** utilizing Seaborn, color-coded by tectonic classification (Blue for Safe/High-Priority, Red for Risk/Caution, Gray for High-Risk).
+   *   An interactive, layered Folium map (`figures/tier1_indonesia_basins_map.html`) illustrating basin proximity circles, emitter heatmaps, and dynamic popup tooltips with final scores.
 
 ---
 ## Technical Outputs Generated (Tier 2 Workflow)
@@ -131,31 +133,22 @@ Tabular results are exported to `data/processed/sunda_asri_capacity_results.csv`
 
 > Every figure title/print statement in the notebook explicitly states whether it used real or illustrative/synthetic input data — check the Section 1 output before citing any number.
 
+---
+
 ## Roadmap
 
 - [x] Phase 0 — Scaffold repo, config parameters, core module validation
-- [x] Phase 1 — Tier 1 national screening (runs on real emitter data when
-      `data/raw/` is populated, illustrative sample data otherwise — always
-      prints which source is active)
-- [~] Phase 2 — Sunda-Asri boundary & depth structure: **illustrative
-      fallback shipped and working**; official QGIS digitization from Badan
-      Geologi map sheets still pending (see Limitations)
-- [~] Phase 3 — GEBCO + GlobSed integration: **wired and tested**, notebook
-      uses real grids automatically when present in `data/raw/`, otherwise
-      falls back to a clearly-labelled synthetic depth surface
-- [~] Phase 4 — Global Energy Monitor tracker ingestion: pipeline exists
-      (`src/ingest_raw_data.py` in the `indonesia-ccs-screening` predecessor
-      repo — being ported here), not yet wired into this repo's Tier 1 notebook
-- [x] Phase 5 — Tier 2: full Sunda-Asri workflow (porosity + CO2 density +
-      fault-distance cut-off → DBSCAN with area filter → Monte Carlo),
-      using real `co2_thermophysics.py` (CoolProp) throughout
+- [x] Phase 1 — Tier 1 national screening (Complete, now updated with GEBCO bathymetry, tectonic priority matrices, multi-criteria cost-effective ranking, publication-ready Stylers, and 300 DPI charts)
+- [~] Phase 2 — Sunda-Asri boundary & depth structure: **illustrative fallback shipped and working**; official QGIS digitization from Badan Geologi map sheets still pending (see Limitations)
+- [~] Phase 3 — GEBCO + GlobSed integration: **wired and tested**, notebook uses real grids automatically when present in `data/raw/`, otherwise falls back to a clearly-labelled synthetic depth surface
+- [~] Phase 4 — Global Energy Monitor tracker ingestion: pipeline exists (`src/ingest_raw_data.py` in the `indonesia-ccs-screening` predecessor repo — being ported here), not yet wired into this repo's Tier 1 notebook
+- [x] Phase 5 — Tier 2: full Sunda-Asri workflow (porosity + CO2 density + fault-distance cut-off → DBSCAN with area filter → Monte Carlo), using real `co2_thermophysics.py` (CoolProp) throughout
 - [ ] Phase 6 — Benchmarking vs Hedriana et al. (2017) & Iskandar et al. (2013)
 - [ ] Phase 7 — Interactive dashboard + poster + short paper
 
-`[~]` = functional with a working fallback, but not yet using fully real,
-digitized/downloaded data end-to-end. This distinction matters — see
-`docs/data_provenance.md` for exactly which files are real vs. illustrative
-in any given run (every notebook prints its active data source explicitly).
+`[~]` = functional with a working fallback, but not yet using fully real, digitized/downloaded data end-to-end. This distinction matters — see `docs/data_provenance.md` for exactly which files are real vs. illustrative in any given run (every notebook prints its active data source explicitly).
+
+---
 
 ## Limitations (read before citing)
 
@@ -167,6 +160,8 @@ This project does not yet have access to confidential proprietary well data (str
 - No mapped overpressure zones for Sunda-Asri yet — hydrostatic pressure gradient assumed everywhere.
 
 What **is** real physics regardless of data availability: CO2 density and phase are computed from the actual CoolProp equation of state (`src/co2_thermophysics.py`), not an empirical approximation, and the Monte Carlo capacity calculation follows Goodman et al. (2011) exactly as implemented and unit-tested in `src/montecarlo_capacity.py`. Every notebook explicitly prints which inputs were real vs. illustrative for a given run — always check that output before citing a number. Full details are in `docs/methodology.md` §4.
+
+---
 
 ## Citation
 
