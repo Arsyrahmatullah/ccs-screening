@@ -7,6 +7,17 @@ scikit-learn>=1.3
 # CO2 thermophysics
 CoolProp>=6.6
 
+# Geometry / fault-distance (ACTIVE dependency: src/optimal_zone_screening.py
+# imports shapely.geometry.LineString/Point inside distance_to_nearest_fault())
+shapely>=2.0
+
+# Real-data readers (ACTIVE when data/raw/ has real files; degrade gracefully
+# via try/except if absent, but required for the "real" Tier 1/Tier 2 paths
+# documented in docs/data_provenance.md):
+xarray>=2024.1       # GEBCO/GlobSed NetCDF grids (scripts/build_notebook_00.py, notebook 01)
+netCDF4>=1.6          # NetCDF backend for xarray
+openpyxl>=3.1          # Global Energy Monitor tracker .xlsx files (src/ingest_raw_data.py)
+
 # Visualisasi
 matplotlib>=3.8
 folium>=0.15
@@ -15,7 +26,7 @@ folium>=0.15
 jupyter>=1.0
 nbformat>=5.9
 
-# (opsional, dipakai kalau nanti masuk ke digitasi/GIS penuh - Tier 2)
+# (opsional, hanya perlu kalau GEBCO didistribusikan sebagai GeoTIFF, bukan
+# NetCDF, dan untuk digitasi/GIS penuh di masa depan - lihat roadmap Phase 6-7)
+rasterio>=1.3           # opsional: fallback GeoTIFF reader di build_notebook_00.py
 # geopandas>=0.14
-# rasterio>=1.3
-# shapely>=2.0

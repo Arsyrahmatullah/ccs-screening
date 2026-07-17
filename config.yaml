@@ -28,7 +28,10 @@ paths:
     sunda_asri_faults: "data/external/sunda_asri_faults_illustrative.csv"
   real:
     basins_processed: "data/processed/basins_processed.csv"
-    emitters: "data/raw/indonesia_emitters_real.csv"
+    emitters: "data/raw/indonesia_emitters_real.csv"  # OUTPUT of src/ingest_raw_data.py
+    gem_coal_tracker: "data/raw/Global-Coal-Plant-Tracker.xlsx"
+    gem_cement_tracker: "data/raw/Global-Cement-and-Concrete-Tracker.xlsx"
+    gem_oil_gas_tracker: "data/raw/Global-Oil-and-Gas-Plant-Tracker.xlsx"
     grid_gebco: "data/raw/gebco_2026_n-4.0_s-6.0_w105.5_e108.0.nc"
     grid_globsed: "data/raw/GlobSed-v3.nc"
     heat_flow_db: "data/raw/IHFC_2024_GHFDB_v.2026.03.txt"
@@ -86,6 +89,24 @@ clustering:
 tier1_scoring:
   search_radius_km: 200        # "loose, realistic for a regional hub" per project decision
   min_distance_floor_km: 5.0   # prevents divide-by-zero for co-located emitters
+
+# -----------------------------------------------------------------------------
+# Emission factors — used by src/ingest_raw_data.py to convert raw Global
+# Energy Monitor tracker capacity units (MW for power/processing, Mt cement/y
+# for cement) into a common "capacity_mtpa_co2_est" column shared by all three
+# trackers, so Tier 1 proximity scoring can treat them identically.
+# GENERIC LITERATURE-AVERAGE FACTORS, NOT PLANT-SPECIFIC — used only as a
+# fallback when the tracker's own reported CO2 figure is blank. See
+# docs/methodology.md §Limitations.
+# -----------------------------------------------------------------------------
+emission_factors:
+  coal_power:
+    tco2_per_mwh: 0.90          # global average sub/supercritical coal, IEA range 0.8-1.0
+    capacity_factor: 0.55       # typical coal plant utilization
+  cement:
+    tco2_per_t_cement: 0.60     # global average, ~0.6 t CO2 / t cement (IEA/CSI)
+  oil_gas_processing:
+    tco2_per_mw_year: 3500      # rough refinery/processing proxy, tCO2 per MW nameplate per year
 # -----------------------------------------------------------------------------
 # Tier 2 reservoir proxies — Sunda-Asri Basin, SRL 1-2
 # Used until real well-derived NTG/porosity/thickness data becomes available.

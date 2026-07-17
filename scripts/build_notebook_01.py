@@ -62,6 +62,18 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
+# Poster/publication-readable defaults -- all tier2_*.png figures inherit
+# these instead of matplotlib's small interactive-notebook defaults.
+plt.rcParams.update({
+    "font.size": 11,
+    "axes.titlesize": 13,
+    "axes.labelsize": 11,
+    "xtick.labelsize": 9,
+    "ytick.labelsize": 9,
+    "legend.fontsize": 9,
+})
+FIGURE_DPI = 300  # print-quality export; was 150
+
 _p = Path.cwd()
 while not (_p / "config.yaml").exists() and _p != _p.parent:
     _p = _p.parent
@@ -119,6 +131,67 @@ print(f"{'='*65}\nBOUNDARY SOURCE : {boundary_source}\nFAULTS SOURCE   : {faults
 print(f"{len(df_boundary)} boundary vertices, {len(df_faults)} fault trace points "
       f"({df_faults['fault_id'].nunique()} distinct faults)")
 """)
+
+# =============================================================================
+md("""### 1b. Shared map styling (scale bar, north arrow, boundary+fault overlay)
+
+Applied consistently to every georeferenced figure in this notebook (previously
+only Fig. 1 and Fig. 4 showed the boundary/fault overlay; Fig. 2 and Fig. 3
+showed the bare grid with no structural context). Also embeds the actual
+REAL/ILLUSTRATIVE source string from Section 1 directly into each figure's
+subtitle, so a saved PNG is self-documenting even outside this notebook.
+""")
+
+code(r"""
+def add_scalebar(ax, lat_ref, length_km=20, loc=(0.06, 0.06)):
+    # Simple horizontal scale bar; length converted from km to degrees
+    # longitude at the basin's mean latitude (small-basin approximation,
+    # fine at this scale -- not valid for continental-scale maps).
+    km_per_deg_lon = 111.32 * np.cos(np.radians(lat_ref))
+    bar_deg = length_km / km_per_deg_lon
+    x0, x1 = ax.get_xlim(); y0, y1 = ax.get_ylim()
+    bx0 = x0 + loc[0] * (x1 - x0)
+    by0 = y0 + loc[1] * (y1 - y0)
+    ax.plot([bx0, bx0 + bar_deg], [by0, by0], color="black", lw=2.5,
+            solid_capstyle="butt", zorder=6)
+    ax.text(bx0 + bar_deg / 2, by0 + 0.018 * (y1 - y0), f"{length_km} km",
+            ha="center", va="bottom", fontsize=8, zorder=6)
+
+
+def add_north_arrow(ax, loc=(0.93, 0.86)):
+    x0, x1 = ax.get_xlim(); y0, y1 = ax.get_ylim()
+    ax_x = x0 + loc[0] * (x1 - x0)
+    ax_y = y0 + loc[1] * (y1 - y0)
+    ax.annotate("N", xy=(ax_x, ax_y + 0.07 * (y1 - y0)), xytext=(ax_x, ax_y),
+                arrowprops=dict(facecolor="black", edgecolor="black", width=3,
+                                 headwidth=8, headlength=8),
+                ha="center", va="center", fontsize=10, fontweight="bold", zorder=6)
+
+
+def add_map_furniture(ax, legend=False, scalebar=True, north=True):
+    # Overlays basin boundary + fault traces (from Section 1's actual
+    # boundary_source/faults_source), plus scale bar and north arrow.
+    ax.plot(list(df_boundary["lon"]) + [df_boundary["lon"].iloc[0]],
+            list(df_boundary["lat"]) + [df_boundary["lat"].iloc[0]],
+            color="red", lw=1.5, zorder=5,
+            label="Basin boundary" if legend else None)
+    for fid, grp in df_faults.groupby("fault_id"):
+        ax.plot(grp["lon"], grp["lat"], "k--", lw=1, alpha=0.75, zorder=5,
+                 label="Fault" if legend and fid == df_faults["fault_id"].iloc[0] else None)
+    if scalebar:
+        add_scalebar(ax, df_boundary["lat"].mean())
+    if north:
+        add_north_arrow(ax)
+    if legend:
+        ax.legend(fontsize=8, loc="upper left", framealpha=0.9)
+
+
+def source_subtitle(*sources):
+    # Joins one or more REAL/ILLUSTRATIVE source strings into a compact
+    # figure subtitle so every exported PNG states its own data provenance.
+    return " | ".join(sources)
+""")
+
 
 # =============================================================================
 md("""### 1a. Depth surface — real GEBCO+GlobSed if available, else synthetic""")
@@ -179,17 +252,14 @@ depth_m_masked = np.where(inside_mask, depth_m, np.nan)
 print(f"{'='*65}\nDEPTH SURFACE SOURCE: {depth_source}\n{'='*65}")
 print(f"Depth range inside basin: {np.nanmin(depth_m_masked):.0f} - {np.nanmax(depth_m_masked):.0f} m")
 
-plt.figure(figsize=(7, 5))
+plt.figure(figsize=(8, 5.5))
 plt.pcolormesh(lon_mesh, lat_mesh, depth_m_masked, cmap="viridis_r", shading="auto")
 plt.colorbar(label="Depth (m)")
-plt.plot(list(df_boundary["lon"]) + [df_boundary["lon"].iloc[0]],
-          list(df_boundary["lat"]) + [df_boundary["lat"].iloc[0]], "r-", lw=1.5, label="Basin boundary")
-for fid, grp in df_faults.groupby("fault_id"):
-    plt.plot(grp["lon"], grp["lat"], "k--", lw=1, alpha=0.7, label="Fault" if fid == df_faults["fault_id"].iloc[0] else None)
-plt.title(f"Sunda-Asri Basin: Depth to Reservoir Top\n({depth_source})", fontsize=10)
-plt.xlabel("Longitude"); plt.ylabel("Latitude"); plt.legend(fontsize=8)
+add_map_furniture(plt.gca(), legend=True)
+plt.title(f"Sunda-Asri Basin: Depth to Reservoir Top\n{source_subtitle(depth_source)}", fontsize=11)
+plt.xlabel("Longitude"); plt.ylabel("Latitude")
 plt.tight_layout()
-plt.savefig(REPO_ROOT / "figures" / "tier2_01_depth_surface.png", dpi=150)
+plt.savefig(REPO_ROOT / "figures" / "tier2_01_depth_surface.png", dpi=FIGURE_DPI)
 plt.show()
 """)
 
@@ -227,15 +297,20 @@ print(f"CO2 density range: {np.nanmin(density_kgm3):.1f} - {np.nanmax(density_kg
 print(f"Supercritical fraction of valid cells: {(phase[valid] == 'supercritical').mean() * 100:.1f}%")
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 4.5))
-for ax, data, title, cmap in zip(
+for i, (ax, data, title, cmap) in enumerate(zip(
     axes, [temperature_c, pressure_mpa, density_kgm3],
     ["Temperature (C)", "Pressure (MPa)", "CO2 density (kg/m3)"], ["inferno", "Blues", "plasma"],
-):
+)):
     im = ax.pcolormesh(lon_mesh, lat_mesh, data, cmap=cmap, shading="auto")
     plt.colorbar(im, ax=ax, fraction=0.046)
-    ax.set_title(title, fontsize=10)
+    add_map_furniture(ax, legend=(i == 0), scalebar=(i == 0), north=(i == 0))
+    ax.set_title(title, fontsize=12)
+    ax.set_xlabel("Longitude")
+axes[0].set_ylabel("Latitude")
+fig.suptitle(f"Sunda-Asri Basin: CO2 thermophysical properties\n"
+             f"{source_subtitle(depth_source)}", fontsize=11, y=1.06)
 plt.tight_layout()
-plt.savefig(REPO_ROOT / "figures" / "tier2_02_thermophysics.png", dpi=150)
+plt.savefig(REPO_ROOT / "figures" / "tier2_02_thermophysics.png", dpi=FIGURE_DPI, bbox_inches="tight")
 plt.show()
 """)
 
@@ -259,10 +334,12 @@ print(f"Porosity range inside basin: {np.nanmin(porosity_percent):.1f}% - {np.na
 plt.figure(figsize=(6, 4.5))
 plt.pcolormesh(lon_mesh, lat_mesh, porosity_percent, cmap="YlGnBu", shading="auto")
 plt.colorbar(label="Porosity (%)")
-plt.title("Sunda-Asri Basin: Modelled Porosity (depth-trend proxy)", fontsize=10)
+add_map_furniture(plt.gca())
+plt.title("Sunda-Asri Basin: Modelled Porosity\n"
+          "(depth-trend proxy, config.yaml -- not calibrated to local core data)", fontsize=12)
 plt.xlabel("Longitude"); plt.ylabel("Latitude")
 plt.tight_layout()
-plt.savefig(REPO_ROOT / "figures" / "tier2_03_porosity.png", dpi=150)
+plt.savefig(REPO_ROOT / "figures" / "tier2_03_porosity.png", dpi=FIGURE_DPI)
 plt.show()
 """)
 
@@ -273,15 +350,14 @@ code(r"""
 fault_distance_km = distance_to_nearest_fault_km(lon_mesh, lat_mesh, df_faults)
 fault_distance_km = np.where(valid, fault_distance_km, np.nan)
 
-plt.figure(figsize=(6, 4.5))
+plt.figure(figsize=(7, 5.5))
 plt.pcolormesh(lon_mesh, lat_mesh, fault_distance_km, cmap="Oranges", shading="auto")
 plt.colorbar(label="Distance to nearest fault (km)")
-for fid, grp in df_faults.groupby("fault_id"):
-    plt.plot(grp["lon"], grp["lat"], "k--", lw=1.2)
-plt.title("Sunda-Asri Basin: Distance to Nearest Fault", fontsize=10)
+add_map_furniture(plt.gca(), legend=True)
+plt.title(f"Sunda-Asri Basin: Distance to Nearest Fault\n{source_subtitle(faults_source)}", fontsize=12)
 plt.xlabel("Longitude"); plt.ylabel("Latitude")
 plt.tight_layout()
-plt.savefig(REPO_ROOT / "figures" / "tier2_04_fault_distance.png", dpi=150)
+plt.savefig(REPO_ROOT / "figures" / "tier2_04_fault_distance.png", dpi=FIGURE_DPI)
 plt.show()
 """)
 
@@ -325,10 +401,11 @@ plt.figure(figsize=(7, 5))
 plot = plt.pcolormesh(lon_mesh, lat_mesh, screening_class, cmap=cmap_zones, vmin=-0.5, vmax=2.5, shading="auto")
 cbar = plt.colorbar(plot, ticks=[0, 1, 2])
 cbar.ax.set_yticklabels(["Non-viable", "Sub-optimal", "Optimal"])
-plt.title("Sunda-Asri Basin: Triple Cut-off Screening\n(porosity + CO2 density + fault distance)", fontsize=10)
+add_map_furniture(plt.gca())
+plt.title("Sunda-Asri Basin: Triple Cut-off Screening\n(porosity + CO2 density + fault distance)", fontsize=13)
 plt.xlabel("Longitude"); plt.ylabel("Latitude")
 plt.tight_layout()
-plt.savefig(REPO_ROOT / "figures" / "tier2_05_screening_classification.png", dpi=150)
+plt.savefig(REPO_ROOT / "figures" / "tier2_05_screening_classification.png", dpi=FIGURE_DPI)
 plt.show()
 """)
 
@@ -385,10 +462,11 @@ else:
 plt.figure(figsize=(7, 5))
 plt.pcolormesh(lon_mesh, lat_mesh, cluster_grid, cmap="tab10", shading="auto")
 plt.colorbar(label="Cluster ID")
-plt.title("Sunda-Asri Basin: Connected Optimal Zones (area-filtered)", fontsize=10)
+add_map_furniture(plt.gca())
+plt.title("Sunda-Asri Basin: Connected Optimal Zones (area-filtered)", fontsize=13)
 plt.xlabel("Longitude"); plt.ylabel("Latitude")
 plt.tight_layout()
-plt.savefig(REPO_ROOT / "figures" / "tier2_06_clusters.png", dpi=150)
+plt.savefig(REPO_ROOT / "figures" / "tier2_06_clusters.png", dpi=FIGURE_DPI)
 plt.show()
 """)
 
@@ -453,9 +531,9 @@ if not df_results.empty:
     )
     plt.xlabel("CO2 storage capacity (Gt), P90-P50-P10")
     plt.ylabel("Cluster ID")
-    plt.title("Sunda-Asri Basin: Volumetric Capacity by Connected Zone", fontsize=11)
+    plt.title("Sunda-Asri Basin: Volumetric Capacity by Connected Zone", fontsize=13)
     plt.tight_layout()
-    plt.savefig(REPO_ROOT / "figures" / "tier2_07_capacity_by_cluster.png", dpi=150)
+    plt.savefig(REPO_ROOT / "figures" / "tier2_07_capacity_by_cluster.png", dpi=FIGURE_DPI)
     plt.show()
 
     output_path = REPO_ROOT / "data" / "processed" / "sunda_asri_capacity_results.csv"

@@ -83,6 +83,10 @@ def print_real_data_instructions() -> None:
     print("\nImportant note: The project development sandbox has limited network access,")
     print("so the download steps above MUST be performed on your own machine")
     print("with full internet access, not via automated scripts here.")
+    print("\nAfter downloading the 3 Global Energy Monitor trackers into data/raw/,")
+    print("run: python3 src/ingest_raw_data.py")
+    print("to convert them into data/raw/indonesia_emitters_real.csv (auto-detected")
+    print("by notebooks/00_tier1_national_screening.ipynb).")
 
 
 def generate_sample_basins(seed: int = 42) -> pd.DataFrame:
