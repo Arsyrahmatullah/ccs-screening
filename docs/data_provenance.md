@@ -11,7 +11,7 @@ Log all data sources planned/used by this project, their status, and the license
 | Dataset | Purpose | Source | License/Requirements | Status |
 |---|---|---|---|---|
 | Indonesian Sedimentary Basin Map (128 basins) | Boundary & tectonic basin classification | Geological Agency of ESDM — [geology.esdm.go.id/geomigas](https://geology.esdm.go.id/geomigas) | Free, must cite source (Geological Survey Center) | 📋 |
-| Bouguer anomaly map, seismotectonic, basin (1:5,000,000) | Trend surface for structure digitization | ESDM Geomap — [geologi.esdm.go.id/geomap](https://geology.esdm.go.id/geomap) | Free | 📋 |
+| Bouguer anomaly map, seismotectonic, basin (1:5,000,000) | Trend surface for structure digitization | ESDM Geomap — [geologi.esdm.go.id/geomap](https://geologi.esdm.go.id/geomap) | Free | 📋 |
 | Oil and gas working area boundaries | Exploration license context vs CCS area | ESDM One Map — [geoportal.esdm.go.id](https://geoportal.esdm.go.id) | Free, web-GIS | 📋 |
 | GlobSed — total sediment thickness (5 arc-min, global) | Initial proxy depth structure | Straume et al. (2019); archive [data.caltech.edu/records/k4070-ngc79](https://data.caltech.edu/records/k4070-ngc79) (NOAA retired 12 May 2025) | Free, mandatory citation (Straume et al., 2019, G-cubed) | 📋 |
 | Global Heat Flow Database, 2024 release | Proxy geothermal gradient | IHFC / GFZ Potsdam data services | Free, mandatory citation | 📋 |
@@ -24,8 +24,8 @@ Log all data sources planned/used by this project, their status, and the license
 | `sample_emitters_indonesia.csv` | Tier 1 demo notebook | Internal creation, synthetic around publicly known industrial clusters | N/A — **not actual emission data** | ✅ (placeholder) |
 | `sunda_asri_boundary_illustrative.csv` | Tier 2 fallback basin polygon | Internal creation, hand-drawn (`src/fetch_open_data.py --mode sample`) — **NOT digitized from an official map** | N/A — placeholder | ✅ (fallback, always available) |
 | `sunda_asri_faults_illustrative.csv` | Tier 2 fallback fault traces | Internal creation, hand-drawn — **NOT digitized from seismic/structural maps** | N/A — placeholder | ✅ (fallback, always available) |
-| `sunda_asri_boundary_digitized.csv` (`data/processed/`) | Tier 2 REAL basin polygon | To be created via QGIS georeferencing of [geology.esdm.go.id/geomigas](https://geology.esdm.go.id/geomigas) | Cite Badan Geologi per their terms | 📋 (planned — highest-priority next step) |
-| `sunda_asri_faults_digitized.csv` (`data/processed/`) | Tier 2 REAL fault traces | To be created via QGIS georeferencing / seismic interpretation | Internal derived product | 📋 (planned) |
+| `sunda_asri_boundary_digitized.csv` (`data/processed/`) | Tier 2 REAL basin polygon | Digitized boundary from official basin mapping | Cite Badan Geologi per their terms | ✅ (real, in use — notebook prints "REAL (QGIS digitized)" when detected) |
+| `sunda_asri_faults_digitized.csv` (`data/processed/`) | Tier 2 REAL fault traces | Digitized fault traces / structural interpretation | Internal derived product | ✅ (real, in use — notebook prints "REAL (QGIS digitized)" when detected) |
 | `gebco_2026_*.nc`, `GlobSed-v3.nc` (`data/raw/`) | Tier 2 REAL depth surface | GEBCO + GlobSed (see rows above) | Free, mandatory citation | 📋 (Tier 2 notebook auto-detects and uses these the moment they're placed in `data/raw/`) |
 
 > **How Tier 2 decides real vs. illustrative**: `notebooks/01_tier2_sunda_asri_workflow.ipynb`
@@ -48,5 +48,4 @@ Log all data sources planned/used by this project, their status, and the license
 - **Code** in this repo: MIT License (see `LICENSE`).
 - **Derived data** (results of digitized public maps, etc.): must include the original source according to the requirements of each data publisher (see table above). Do not re-upload third-party raw data that has a "no redistribution" clause — simply store the download script + instructions (`src/fetch_open_data.py --mode real`).
 - **Two reference papers** (de Jonge-Anderson et al., 2025; Nooraiepour et al., 2025) are licensed under CC BY 4.0 (open access) — may be cited/paraphrased freely with attribution, but do not reproduce figures/text verbatim in large quantities.
-
 
