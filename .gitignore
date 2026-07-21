@@ -27,3 +27,11 @@ data/processed/*
 
 # Jupyter
 *.ipynb_checkpoints
+
+#workflow
+workflow.py
+workflow_ccs_final_v2.png
+mapper.py
+
+.gitignore
+.gitattributes

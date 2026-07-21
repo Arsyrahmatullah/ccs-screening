@@ -24,6 +24,8 @@ Contributions adapted:
 - **Storage Readiness Level (SRL)**: a 1-9 scale to honestly state the maturity level of a study/site, rather than letting the reader assume all figures are equivalent.
 - Transparent stance on data limitations in countries/regions that have just begun developing CCS (sparse data, limited research access, immature industry-academia collaboration)—precisely the current situation in Indonesia.
 
+`figures/figure1_location_map.png` visualizes this pairing directly: Indonesia's two designated priority basins (Sunda-Asri, Bintuni) plotted alongside the Malay Basin and Poland, the two study areas this project's methodology is adapted from.
+
 ---
 
 ## 2. Why this project is divided into Tier 1 / Tier 2
@@ -91,6 +93,17 @@ Where:
 
 The output ranks the top 3 recommended basins for potential Tier 2 selection.
 
+### 3.4 Benchmarking against literature (dropped from scope)
+This project no longer benchmarks its illustrative Tier 1 capacity figures against external literature estimates (Hedriana et al., 2017; Iskandar et al., 2013). Those figures cover a different basin/formation scope than this project's outputs and did not provide a meaningful sanity check. Confidence in the Tier 2 workflow instead comes from using real digitized Sunda-Asri boundary/fault data (§2, Roadmap Phase 2) rather than from cross-paper benchmarking.
+
+### 3.5 Workflow schematic
+
+**Figure 2** below gives the full Tier 1 → Tier 2 pipeline in one diagram — from the national basin inventory down to the Monte Carlo capacity results for Sunda-Asri. It's the visual counterpart to the text/ASCII pipeline in §3 above (Tier 1) and to the Tier 2 steps described in `README.md` → "Technical Outputs Generated (Tier 2 Workflow)".
+
+![Figure 2. Tier 1 → Tier 2 screening and assessment workflow](../figures/workflow_schematic_tier1_tier2.png)
+
+*Figure 2. Tier 1 → Tier 2 screening and assessment workflow. Orange boxes denote hard-filter/cut-off decision steps. The dashed arrow marks that the Tier 1 ranking is a complementary check on the Sunda-Asri selection, not its primary basis (§4.1). Source: `config.yaml`, `src/optimal_zone_screening.py`, `src/co2_thermophysics.py`, `src/montecarlo_capacity.py`.*
+
 ---
 
 ## 4. Basins selected for Tier 2
@@ -120,7 +133,8 @@ Consequences:
 - All capacity figures in `notebooks/00_tier1_national_screening.ipynb` use **illustrative basin-scale geometry**, not measurement/digitization results, and are computed only for the SRL 2 subset described in §2.1. This is explicitly noted in every relevant cell and printed at runtime.
 - `notebooks/01_tier2_sunda_asri_workflow.ipynb` uses an **illustrative hand-drawn boundary/fault network** and a **synthetic bowl-shaped depth surface** unless you supply real GEBCO/GlobSed grids and a QGIS-digitized boundary (see `docs/data_provenance.md`). The notebook always prints which inputs were real vs. illustrative for a given run — check that output before citing a number.
 - This project is realistically capped at **SRL 1-2**, not SRL 3+ like [MB].
-- Any claim of "X Gt potential in Y basin" from external sources (e.g., claims of >400 Gt CO2-eq nationally in depleted reservoirs according to Presidential Regulation 14/2024, or ~14.8 Gt of saline formation in South Sumatra + Java from Hedriana et al., 2017) is cited as **context/benchmark**, not as calculation results from this project.
+- Any claim of "X Gt potential in Y basin" from external sources (e.g., claims of >400 Gt CO2-eq nationally in depleted reservoirs according to Presidential Regulation 14/2024, or ~14.8 Gt of saline formation in South Sumatra + Java from Hedriana et al., 2017) is cited as **context/benchmark**, not as calculation results from this project — this applies equally to the draft comparison chart in §3.4, which plots these external figures alongside this project's own illustrative numbers for visual context only.
+- The supplementary figures in `figures/real/` and `figures/figure1_location_map.png` are poster/manuscript drafts (Roadmap Phase 7) prepared outside the notebook pipeline. They carry the same illustrative-data caveats as the rest of this repo and are not additional evidence of real-data coverage.
 
 What is **not** a limitation: CO2 density and phase in both tiers are computed from the real CoolProp equation of state (`src/co2_thermophysics.py`), and all three [MB] cut-off criteria (porosity, CO2 density, fault distance) are applied together in Tier 2 — these parts of the methodology are implemented as designed, independent of whether the underlying geometry is real or illustrative.
 
@@ -132,3 +146,4 @@ What is **not** a limitation: CO2 density and phase in both tiers are computed f
 2. Replace geothermal gradient proxy with points from the 2024 Global Heat Flow Database that fall within Indonesian territory + interpolation (kriging/IDW).
 3. Replace synthetic emitter data with actual Global Energy Monitor trackers.
 4. Recalibrate cut-offs (`config.yaml`) once local porosity data is available from Indonesian reports/papers that can be cited openly (e.g., open-access IPA proceedings).
+5. Formalize the draft benchmarking chart (§3.4) into Phase 6: verify original sourcing/access for each literature figure, and clearly separate "this project's model output" from "externally reported figures" in the final poster/paper version.

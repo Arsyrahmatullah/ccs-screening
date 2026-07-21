@@ -1,0 +1,3371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_597436e33d73cd580aa5858ad6849e76 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_597436e33d73cd580aa5858ad6849e76" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_597436e33d73cd580aa5858ad6849e76 = L.map(
+                "map_597436e33d73cd580aa5858ad6849e76",
+                {
+                    center: [-5.070536363636363, 106.47771818181819],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 6,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_79c710897eeab36f9a36c32fafe0c17b = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_79c710897eeab36f9a36c32fafe0c17b.addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            var polygon_06e83be11f5ef247ef67ba82dc33e5e5 = L.polygon(
+                [[-4.281, 106.329], [-4.199, 106.4], [-4.199, 106.425], [-4.199, 106.457], [-4.205, 106.502], [-4.212, 106.529], [-4.225, 106.576], [-4.225, 106.625], [-4.227, 106.641], [-4.235, 106.678], [-4.255, 106.761], [-4.279, 106.849], [-4.3, 106.919], [-4.316, 106.967], [-4.316, 107.046], [-4.322, 107.144], [-4.338, 107.192], [-4.365, 107.203], [-4.401, 107.254], [-4.444, 107.339], [-4.455, 107.391], [-4.488, 107.462], [-4.561, 107.513], [-4.616, 107.536], [-4.695, 107.531], [-4.724, 107.504], [-4.758, 107.451], [-4.8, 107.344], [-4.811, 107.256], [-4.826, 107.179], [-4.857, 107.106], [-4.893, 107.065], [-4.921, 107.031], [-4.964, 107.015], [-4.989, 107.001], [-5.012, 106.989], [-5.034, 106.935], [-5.071, 106.887], [-5.146, 106.865], [-5.223, 106.855], [-5.301, 106.823], [-5.398, 106.753], [-5.441, 106.732], [-5.457, 106.71], [-5.484, 106.657], [-5.505, 106.619], [-5.53, 106.597], [-5.548, 106.582], [-5.556, 106.567], [-5.571, 106.542], [-5.601, 106.507], [-5.611, 106.497], [-5.617, 106.491], [-5.617, 106.465], [-5.623, 106.421], [-5.639, 106.4], [-5.656, 106.385], [-5.671, 106.373], [-5.682, 106.368], [-5.696, 106.363], [-5.708, 106.358], [-5.724, 106.351], [-5.746, 106.314], [-5.766, 106.286], [-5.773, 106.276], [-5.783, 106.271], [-5.789, 106.228], [-5.789, 106.218], [-5.805, 106.185], [-5.823, 106.153], [-5.826, 106.134], [-5.826, 106.089], [-5.821, 106.052], [-5.81, 106.043], [-5.789, 106.025], [-5.775, 106.019], [-5.762, 106.014], [-5.732, 105.989], [-5.713, 105.968], [-5.703, 105.955], [-5.659, 105.936], [-5.619, 105.924], [-5.58, 105.912], [-5.572, 105.914], [-5.533, 105.918], [-5.51, 105.918], [-5.467, 105.902], [-5.353, 105.902], [-5.293, 105.906], [-5.237, 105.912], [-5.178, 105.912], [-5.119, 105.918], [-5.089, 105.925], [-5.018, 105.939], [-4.98, 105.95], [-4.916, 105.95], [-4.849, 105.95], [-4.82, 105.95], [-4.766, 105.961], [-4.677, 105.961], [-4.616, 105.961], [-4.553, 105.968], [-4.52, 105.971], [-4.427, 106.02], [-4.365, 106.128], [-4.281, 106.329], [-4.427, 106.02], [-4.427, 106.02], [-4.427, 106.02], [-4.427, 106.02]],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.3, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 1.0, "smoothFactor": 1.0, "stroke": true, "weight": 2}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            var circle_marker_5b9982740650241d61ebfbb89155d2a1 = L.circleMarker(
+                [0.1, 116.4],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_5b9982740650241d61ebfbb89155d2a1.bindTooltip(
+                `<div>
+                     Adaro East Kalimantan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a4a1059bc8a59f2113187dc299832811 = L.circleMarker(
+                [-7.685942, 109.13756],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a4a1059bc8a59f2113187dc299832811.bindTooltip(
+                `<div>
+                     Adipala power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_102981b0689bb3a27a3f79bdd3e606c7 = L.circleMarker(
+                [2.4946822, 117.9001999],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_102981b0689bb3a27a3f79bdd3e606c7.bindTooltip(
+                `<div>
+                     AlamTri Aluminum Smelter power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ef42cd17a51d00adc5439e0885dcde29 = L.circleMarker(
+                [-4.827752, 136.839082],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ef42cd17a51d00adc5439e0885dcde29.bindTooltip(
+                `<div>
+                     Amamapare Port power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a0d2f83518353bfa23ad07bf4d7fcb8e = L.circleMarker(
+                [-3.586516, 128.171111],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a0d2f83518353bfa23ad07bf4d7fcb8e.bindTooltip(
+                `<div>
+                     Ambon-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c8cfa2408195dcab693657241997519e = L.circleMarker(
+                [1.182502, 124.480564],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_c8cfa2408195dcab693657241997519e.bindTooltip(
+                `<div>
+                     Amurang-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8bbfa62bb981f06df6875878523e78ad = L.circleMarker(
+                [1.182502, 124.480564],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8bbfa62bb981f06df6875878523e78ad.bindTooltip(
+                `<div>
+                     Amurang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8305a4a73daae92d079064763b52a796 = L.circleMarker(
+                [-6.024754, 105.942635],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8305a4a73daae92d079064763b52a796.bindTooltip(
+                `<div>
+                     Asahimas Chemical power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f826f8649e9d1faadf789a01c3511373 = L.circleMarker(
+                [-3.9265336, 115.105805],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f826f8649e9d1faadf789a01c3511373.bindTooltip(
+                `<div>
+                     Asam-Asam power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_744b038a1afb7d65b9186bd1443458ab = L.circleMarker(
+                [-2.75, 103.833333],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_744b038a1afb7d65b9186bd1443458ab.bindTooltip(
+                `<div>
+                     Astratel power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_61903bc9405e2c670135cf2dcae9295b = L.circleMarker(
+                [0.605, 117.481],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_61903bc9405e2c670135cf2dcae9295b.bindTooltip(
+                `<div>
+                     Bakrie Sangatta power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_20bd081585a5ae1e5e879ab139a39f7e = L.circleMarker(
+                [-8.447602, 115.122206],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_20bd081585a5ae1e5e879ab139a39f7e.bindTooltip(
+                `<div>
+                     Bali Power Station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_266c7755ca3d9807efc88766b106f212 = L.circleMarker(
+                [-6.970501, 107.605782],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_266c7755ca3d9807efc88766b106f212.bindTooltip(
+                `<div>
+                     Bandung Indosyntec power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a8fec7e7846acd6a2abd63263dd5b9dd = L.circleMarker(
+                [-2.079245, 106.149617],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a8fec7e7846acd6a2abd63263dd5b9dd.bindTooltip(
+                `<div>
+                     Bangka-1A power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_909e2ff48d0d314fef16006472a0dac2 = L.circleMarker(
+                [-2.133333, 106.116667],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_909e2ff48d0d314fef16006472a0dac2.bindTooltip(
+                `<div>
+                     Bangka-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8600829459e1ea2e1cc0252f6ccdf502 = L.circleMarker(
+                [-2.079245, 106.149617],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8600829459e1ea2e1cc0252f6ccdf502.bindTooltip(
+                `<div>
+                     Bangka Baru power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_11fad9d210a90b8aa6504f57554c53d7 = L.circleMarker(
+                [-3.838679, 103.804133],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_11fad9d210a90b8aa6504f57554c53d7.bindTooltip(
+                `<div>
+                     Bangko Tengah power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_43d399df23d6dc3fa121cc5a5b4d7cb3 = L.circleMarker(
+                [-3.734, 103.759],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_43d399df23d6dc3fa121cc5a5b4d7cb3.bindTooltip(
+                `<div>
+                     Bangko Tengah power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5ecdf448cf02855dc1dd87b599b522e5 = L.circleMarker(
+                [-3.72507, 103.69039],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_5ecdf448cf02855dc1dd87b599b522e5.bindTooltip(
+                `<div>
+                     Banjarsari power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_aa9805b62138f4c80b48a6db2e586f61 = L.circleMarker(
+                [-5.51695, 120.02061],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_aa9805b62138f4c80b48a6db2e586f61.bindTooltip(
+                `<div>
+                     Bantaeng BSE power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fb081354bf43c1d964c8bcbf6be201cf = L.circleMarker(
+                [-6.392179, 105.82778],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_fb081354bf43c1d964c8bcbf6be201cf.bindTooltip(
+                `<div>
+                     Banten Labuan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_eb728cc6728aabc46e3710dd810cb649 = L.circleMarker(
+                [-6.058874, 106.4643],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_eb728cc6728aabc46e3710dd810cb649.bindTooltip(
+                `<div>
+                     Banten Lontar power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_999f4e2b3f83799ab1baf81c30166ef5 = L.circleMarker(
+                [-5.882972, 106.045929],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_999f4e2b3f83799ab1baf81c30166ef5.bindTooltip(
+                `<div>
+                     Banten Serang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a9180c8d3d189c1254a217bac38d0556 = L.circleMarker(
+                [-5.8919073, 106.0302341],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a9180c8d3d189c1254a217bac38d0556.bindTooltip(
+                `<div>
+                     Banten Suralaya power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_371db5a25399183f8132826de34dc06a = L.circleMarker(
+                [-5.8892179, 106.0336018],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_371db5a25399183f8132826de34dc06a.bindTooltip(
+                `<div>
+                     Banten Suralaya power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f0e5020e62110df82b83ef168802631c = L.circleMarker(
+                [-3.347874, 103.900474],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f0e5020e62110df82b83ef168802631c.bindTooltip(
+                `<div>
+                     Banyuasin power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bf51e4cd50a6487475599f7cce279f55 = L.circleMarker(
+                [-4.29329, 119.63135],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_bf51e4cd50a6487475599f7cce279f55.bindTooltip(
+                `<div>
+                     Barru power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fe224985fa7eb4d2a331f823506e2ab4 = L.circleMarker(
+                [-8.901172, 116.738209],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_fe224985fa7eb4d2a331f823506e2ab4.bindTooltip(
+                `<div>
+                     Batu Hijau power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_21aa16c5908e9b4f03a930d8df174c25 = L.circleMarker(
+                [-5.459424, 122.605949],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_21aa16c5908e9b4f03a930d8df174c25.bindTooltip(
+                `<div>
+                     Bau-Bau Power Station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9547de1fba6cc8d3374925b30f26e8d6 = L.circleMarker(
+                [0.83511, 108.873675],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_9547de1fba6cc8d3374925b30f26e8d6.bindTooltip(
+                `<div>
+                     Bengkayang Power Station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ef71ea8ef44c474d820bc3c65e78ef61 = L.circleMarker(
+                [-3.912348, 102.270375],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ef71ea8ef44c474d820bc3c65e78ef61.bindTooltip(
+                `<div>
+                     Bengkulu power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5ea0013040934a65dbb513d75287df41 = L.circleMarker(
+                [0.899668, 104.617247],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_5ea0013040934a65dbb513d75287df41.bindTooltip(
+                `<div>
+                     Bintan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6cb95aecca1cd83cee8f36f4f346079c = L.circleMarker(
+                [-5.971, 106.094],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_6cb95aecca1cd83cee8f36f4f346079c.bindTooltip(
+                `<div>
+                     Bojonegara Serang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e937c91d93fd826f17582a206dc780d3 = L.circleMarker(
+                [1.589, 101.638],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e937c91d93fd826f17582a206dc780d3.bindTooltip(
+                `<div>
+                     BTN Dumai power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ab2251b3979660760552e1fc9575047f = L.circleMarker(
+                [-3.73213, 103.797527],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ab2251b3979660760552e1fc9575047f.bindTooltip(
+                `<div>
+                     Bukit Asam Muara Enim power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5a3688e4d85e846450359b1601a7ef0e = L.circleMarker(
+                [0.605, 117.481],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_5a3688e4d85e846450359b1601a7ef0e.bindTooltip(
+                `<div>
+                     BUMI Sangatta power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a154a24ad9ef137b22a0ef6541d78fbd = L.circleMarker(
+                [-8.196295, 114.851568],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a154a24ad9ef137b22a0ef6541d78fbd.bindTooltip(
+                `<div>
+                     Celukan Bawang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2147c29d90359bc71248422813c5d32b = L.circleMarker(
+                [-6.950808, 106.250158],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_2147c29d90359bc71248422813c5d32b.bindTooltip(
+                `<div>
+                     Cemindo Gemilang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8272154325d050c4d4bc047a217f7955 = L.circleMarker(
+                [-6.900828, 109.803685],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8272154325d050c4d4bc047a217f7955.bindTooltip(
+                `<div>
+                     Central Java Power Project
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_06097edf9f7f6bac8c3416d75c0048db = L.circleMarker(
+                [-6.11607, 107.05197],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_06097edf9f7f6bac8c3416d75c0048db.bindTooltip(
+                `<div>
+                     Cikarang Babelan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_539f02793e3d0b2e4c0f449ba119e10e = L.circleMarker(
+                [-7.684, 109.131],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_539f02793e3d0b2e4c0f449ba119e10e.bindTooltip(
+                `<div>
+                     Cilacap power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_547f8642e7910c75ddd7a49b2f5253d2 = L.circleMarker(
+                [-7.6832417, 109.096384],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_547f8642e7910c75ddd7a49b2f5253d2.bindTooltip(
+                `<div>
+                     Cilacap Sumber power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ad545388b9d8cdb6c848e5cee8e1ba1a = L.circleMarker(
+                [-7.68575, 109.08977],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ad545388b9d8cdb6c848e5cee8e1ba1a.bindTooltip(
+                `<div>
+                     Cilacap Sumber power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_70cb87453758cc8642d91d530bd5b6cb = L.circleMarker(
+                [-6.023889, 105.950127],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_70cb87453758cc8642d91d530bd5b6cb.bindTooltip(
+                `<div>
+                     Cilegon PTIP Power Station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f47fe5459904255625eee1e018ebec19 = L.circleMarker(
+                [-6.770286, 108.614858],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f47fe5459904255625eee1e018ebec19.bindTooltip(
+                `<div>
+                     Cirebon power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_dd73725c59914e3830c612c9bd2776e3 = L.circleMarker(
+                [-2.004694, 121.4380707],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_dd73725c59914e3830c612c9bd2776e3.bindTooltip(
+                `<div>
+                     Delong Nickel Phase III power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2c41fae1a38853433e14f1d0876df9a0 = L.circleMarker(
+                [-3.8279104, 122.4682708],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_2c41fae1a38853433e14f1d0876df9a0.bindTooltip(
+                `<div>
+                     Delong Nickel Phase II power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_96590ab4b5bd591ba42946434184dcde = L.circleMarker(
+                [-3.8282793, 122.4662306],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_96590ab4b5bd591ba42946434184dcde.bindTooltip(
+                `<div>
+                     Delong Nickel Phase II power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_149aa0b1b2ba7d18302ebaa0c2fb39ef = L.circleMarker(
+                [-3.8274877, 122.462752],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_149aa0b1b2ba7d18302ebaa0c2fb39ef.bindTooltip(
+                `<div>
+                     Delong Nickel Phase II power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f83be00a9602530e159d3bbffc098043 = L.circleMarker(
+                [-3.907537, 122.419265],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f83be00a9602530e159d3bbffc098043.bindTooltip(
+                `<div>
+                     Delong Nickel Phase I power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ae43dd231840ae5d430dc861ae4fab9d = L.circleMarker(
+                [-2.01656606, 121.4311814],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ae43dd231840ae5d430dc861ae4fab9d.bindTooltip(
+                `<div>
+                     Delong Nickel Phase IV power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_400b8dc98f2792bacd13130465b44a98 = L.circleMarker(
+                [0.832508, 128.285273],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_400b8dc98f2792bacd13130465b44a98.bindTooltip(
+                `<div>
+                     East Halmahera power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fa44baf8ba1a1eaf4dc514d41ef713ef = L.circleMarker(
+                [-0.373097, 117.062462],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_fa44baf8ba1a1eaf4dc514d41ef713ef.bindTooltip(
+                `<div>
+                     Embalut power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_87582581908aa195363f311de232147f = L.circleMarker(
+                [-6.272646, 107.124019],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_87582581908aa195363f311de232147f.bindTooltip(
+                `<div>
+                     FAJAR power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b0bac551f6d1299f71acbf3b1abfbdef = L.circleMarker(
+                [0.9575588, 104.0486358],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_b0bac551f6d1299f71acbf3b1abfbdef.bindTooltip(
+                `<div>
+                     Gallant Venture power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_97b091fd9bdd14d7fcb778cd39334093 = L.circleMarker(
+                [-7.159, 112.642],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_97b091fd9bdd14d7fcb778cd39334093.bindTooltip(
+                `<div>
+                     Gresik AKR power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_65d88d48bdc7f5ba2a0473d4880d0d97 = L.circleMarker(
+                [1.018017, 128.26606],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_65d88d48bdc7f5ba2a0473d4880d0d97.bindTooltip(
+                `<div>
+                     Haltim power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5763a48ecca1c94b875c853e3e78e34a = L.circleMarker(
+                [-6.87203, 107.59869],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_5763a48ecca1c94b875c853e3e78e34a.bindTooltip(
+                `<div>
+                     Hongshi Silikon power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_59bde9ef9a184dc9914ad470d51b67c8 = L.circleMarker(
+                [-6.125435, 106.289205],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_59bde9ef9a184dc9914ad470d51b67c8.bindTooltip(
+                `<div>
+                     Indah Kiat Serang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0b19df14061f311625a902708fc03e32 = L.circleMarker(
+                [-0.950059, 100.469542],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_0b19df14061f311625a902708fc03e32.bindTooltip(
+                `<div>
+                     Indarung Cement power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e482ded1ad53cfa548c56cb0904d9eef = L.circleMarker(
+                [-6.485801, 107.385203],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e482ded1ad53cfa548c56cb0904d9eef.bindTooltip(
+                `<div>
+                     Indo Bharat Rayon power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e8aa6d50f6f6a4d3eb113681026dde88 = L.circleMarker(
+                [-6.274738, 107.97043],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e8aa6d50f6f6a4d3eb113681026dde88.bindTooltip(
+                `<div>
+                     Indramayu power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2052645659fc64dfaf92436898f63aae = L.circleMarker(
+                [3.350271, 117.601826],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_2052645659fc64dfaf92436898f63aae.bindTooltip(
+                `<div>
+                     I Skip power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a590a2c81d3356668dcc8ab19307bd1c = L.circleMarker(
+                [-6.895752, 110.24025],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a590a2c81d3356668dcc8ab19307bd1c.bindTooltip(
+                `<div>
+                     Jababeka KIP power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a81e4435800666bb2f47a8dc61ddda21 = L.circleMarker(
+                [-5.935064, 107.030182],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a81e4435800666bb2f47a8dc61ddda21.bindTooltip(
+                `<div>
+                     Jabar Utara power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0ee29dd8e04ce3fa59420dd9cf3eef2b = L.circleMarker(
+                [-2.1375, 102.957222],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_0ee29dd8e04ce3fa59420dd9cf3eef2b.bindTooltip(
+                `<div>
+                     Jambi-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ae8027e9095b7589e432d991e8e10aab = L.circleMarker(
+                [-1.928422, 103.189944],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ae8027e9095b7589e432d991e8e10aab.bindTooltip(
+                `<div>
+                     Jambi-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c2cd4551b4a4e39b78087822748e59ad = L.circleMarker(
+                [-1.39, 102.42],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_c2cd4551b4a4e39b78087822748e59ad.bindTooltip(
+                `<div>
+                     Jambi Tebo power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_df6048088d70941262e6c0cc54f81d66 = L.circleMarker(
+                [-7.26, 110.66],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_df6048088d70941262e6c0cc54f81d66.bindTooltip(
+                `<div>
+                     Jawa-11 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_408614700cb9fa3635ad4101068d9056 = L.circleMarker(
+                [-7.26, 110.66],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_408614700cb9fa3635ad4101068d9056.bindTooltip(
+                `<div>
+                     Jawa-12 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ebf1e0b6329ace07541367cbeacf7380 = L.circleMarker(
+                [-7.26, 110.66],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ebf1e0b6329ace07541367cbeacf7380.bindTooltip(
+                `<div>
+                     Jawa-13 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_08df25a424a7791efa47347693966b4d = L.circleMarker(
+                [-5.935064, 107.030182],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_08df25a424a7791efa47347693966b4d.bindTooltip(
+                `<div>
+                     Jawa-5 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7e25d213e8f8ee6d293690ab28362d63 = L.circleMarker(
+                [-5.935064, 107.030182],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_7e25d213e8f8ee6d293690ab28362d63.bindTooltip(
+                `<div>
+                     Jawa-6 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c4a94a0e6423fc0b99b0f4bc731a75bd = L.circleMarker(
+                [-5.991694, 106.1008],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_c4a94a0e6423fc0b99b0f4bc731a75bd.bindTooltip(
+                `<div>
+                     Jawa-7 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d58e71857a3059e3c4121306ecdc8c25 = L.circleMarker(
+                [-2.60839, 140.807479],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_d58e71857a3059e3c4121306ecdc8c25.bindTooltip(
+                `<div>
+                     Jayapura-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8b55753f2ef8d3de9df06efe6d44ea14 = L.circleMarker(
+                [-2.60839, 140.807479],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8b55753f2ef8d3de9df06efe6d44ea14.bindTooltip(
+                `<div>
+                     Jayapura-3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cb402d813d72eab2082a597a2470933d = L.circleMarker(
+                [-1.56606, 127.415933],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_cb402d813d72eab2082a597a2470933d.bindTooltip(
+                `<div>
+                     Jinchuan Group WP&RKA power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e870c1bbf4531e33cc43d1a58f623bf9 = L.circleMarker(
+                [1.589, 101.638],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e870c1bbf4531e33cc43d1a58f623bf9.bindTooltip(
+                `<div>
+                     Kabil PKB power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_24d8fc4c79fa2c18aa757dbf2e51ab33 = L.circleMarker(
+                [0.816152, 108.846126],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_24d8fc4c79fa2c18aa757dbf2e51ab33.bindTooltip(
+                `<div>
+                     Kalbar-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_32d09c2a7c4cb498a2e68f2ab156992a = L.circleMarker(
+                [-0.6783899, 109.25354],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_32d09c2a7c4cb498a2e68f2ab156992a.bindTooltip(
+                `<div>
+                     Kalbar-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ec8b47ce97314b11b8049843f2f1a9ab = L.circleMarker(
+                [-0.276265, 109.2795913],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ec8b47ce97314b11b8049843f2f1a9ab.bindTooltip(
+                `<div>
+                     Kalbar-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5e0ced24fae34394dfcc9c5f80d880b0 = L.circleMarker(
+                [0.341989, 108.940307],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_5e0ced24fae34394dfcc9c5f80d880b0.bindTooltip(
+                `<div>
+                     Kalbar-3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_83e189102317f50a8af16cb18208edf0 = L.circleMarker(
+                [1.227, 114.577],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_83e189102317f50a8af16cb18208edf0.bindTooltip(
+                `<div>
+                     Kalbar-4 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7ef5b2b5ddaed169381c715e34da376f = L.circleMarker(
+                [-3.272913, 116.105886],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_7ef5b2b5ddaed169381c715e34da376f.bindTooltip(
+                `<div>
+                     Kalimantan Cement Works power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b0465949024198f7b326e041471eab31 = L.circleMarker(
+                [-1.370796, 113.567203],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_b0465949024198f7b326e041471eab31.bindTooltip(
+                `<div>
+                     Kalselteng-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_760099b850fa7a0945a7894623e39245 = L.circleMarker(
+                [-2.8086279, 111.6430664],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_760099b850fa7a0945a7894623e39245.bindTooltip(
+                `<div>
+                     Kalselteng-3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d13a6fd8d4be3099c5f990069ef6d733 = L.circleMarker(
+                [1.034129, 108.972598],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_d13a6fd8d4be3099c5f990069ef6d733.bindTooltip(
+                `<div>
+                     Kalselteng-4 Hybrid power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f8c8167b02d145c6de05bccf119fab7a = L.circleMarker(
+                [-2.808628, 111.643066],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f8c8167b02d145c6de05bccf119fab7a.bindTooltip(
+                `<div>
+                     Kalselteng-5 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d876433b20e292a047c4d58b72ed8d75 = L.circleMarker(
+                [-2.822646, 114.208831],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_d876433b20e292a047c4d58b72ed8d75.bindTooltip(
+                `<div>
+                     Kalteng-1 Pulang Pisau power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_abd261a5f89e62bca84051c9dea24675 = L.circleMarker(
+                [0.135698, 116.220724],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_abd261a5f89e62bca84051c9dea24675.bindTooltip(
+                `<div>
+                     Kaltim-3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f4a437340b8e63ab8c1b1ae84fb3c3a2 = L.circleMarker(
+                [-0.364211, 117.0663078],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f4a437340b8e63ab8c1b1ae84fb3c3a2.bindTooltip(
+                `<div>
+                     Kaltim-4 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_282720e50958fd7b9bc7c6ac96e97546 = L.circleMarker(
+                [-0.911827, 117.195282],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_282720e50958fd7b9bc7c6ac96e97546.bindTooltip(
+                `<div>
+                     Kaltim-5 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_515a5651ee65eee8423918605bba6e49 = L.circleMarker(
+                [1.227, 114.577],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_515a5651ee65eee8423918605bba6e49.bindTooltip(
+                `<div>
+                     Kaltim-6 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f35ec526dbb571f461e2e2c78d1e2763 = L.circleMarker(
+                [0.0551785, 117.4945887],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f35ec526dbb571f461e2e2c78d1e2763.bindTooltip(
+                `<div>
+                     Kaltim FTP2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_89312eb2aa8b0df2d7a914b228bd3092 = L.circleMarker(
+                [1.227, 114.577],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_89312eb2aa8b0df2d7a914b228bd3092.bindTooltip(
+                `<div>
+                     Kaltimra power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8938f3eed51c8b6bac36ef2b5561c613 = L.circleMarker(
+                [-1.17036, 116.78872],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8938f3eed51c8b6bac36ef2b5561c613.bindTooltip(
+                `<div>
+                     Kaltim Teluk Balikpapan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_847f3f84ce0efbf952181f5f39184c7c = L.circleMarker(
+                [-8.366667, 115.516667],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_847f3f84ce0efbf952181f5f39184c7c.bindTooltip(
+                `<div>
+                     Karang Asem power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fb2022994ea1f49ee37246d4235f3358 = L.circleMarker(
+                [-3.75149, 103.64809],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_fb2022994ea1f49ee37246d4235f3358.bindTooltip(
+                `<div>
+                     Keban Agung power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_121c9d7b66b0e61617503fa90ad79f95 = L.circleMarker(
+                [-4.0512916, 122.6534484],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_121c9d7b66b0e61617503fa90ad79f95.bindTooltip(
+                `<div>
+                     Kendari-3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e430bdc0ba5e00723c43fc222bcf9214 = L.circleMarker(
+                [-2.235600318, 110.1066255],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e430bdc0ba5e00723c43fc222bcf9214.bindTooltip(
+                `<div>
+                     Ketapang Bangun Sarana power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8b921b727a39d85363f73b77e117d480 = L.circleMarker(
+                [-2.366182, 110.157272],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8b921b727a39d85363f73b77e117d480.bindTooltip(
+                `<div>
+                     Ketapang Smelter power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_04de0d7410c795ec85a021ce60766884 = L.circleMarker(
+                [0.815946, 117.930767],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_04de0d7410c795ec85a021ce60766884.bindTooltip(
+                `<div>
+                     KIPI Bika Global power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_13590e00a62c602138304797d9d9a42a = L.circleMarker(
+                [0.815946, 117.930767],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_13590e00a62c602138304797d9d9a42a.bindTooltip(
+                `<div>
+                     KIPI power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_466fa6ed2946ead44f8032353278a957 = L.circleMarker(
+                [-4.976468, 105.185679],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_466fa6ed2946ead44f8032353278a957.bindTooltip(
+                `<div>
+                     Komering Agung Power Station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c81203d8d421eceaf30d2b37c855d5f9 = L.circleMarker(
+                [3.386793, 99.426699],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_c81203d8d421eceaf30d2b37c855d5f9.bindTooltip(
+                `<div>
+                     Kuala Tanjung-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a30b734a1dc0fd6daa58da3b0a951ab4 = L.circleMarker(
+                [3.375398, 99.441805],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a30b734a1dc0fd6daa58da3b0a951ab4.bindTooltip(
+                `<div>
+                     Kuala Tanjung-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9946c5886e7918cd40b225065225dd7e = L.circleMarker(
+                [3.3506353, 99.4513321],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_9946c5886e7918cd40b225065225dd7e.bindTooltip(
+                `<div>
+                     Kuala Tanjung Inalum captive power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d1c04cd9e2180cd85511b84913200de6 = L.circleMarker(
+                [-7.813903, 110.175023],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_d1c04cd9e2180cd85511b84913200de6.bindTooltip(
+                `<div>
+                     Kulon Progo power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_59b762d90d6b2b035f086092bf758a18 = L.circleMarker(
+                [1.7518502, 98.7312856],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_59b762d90d6b2b035f086092bf758a18.bindTooltip(
+                `<div>
+                     Labuhan Angin power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_63d40524c4f56f51ebf5bc7385462a30 = L.circleMarker(
+                [1.7519953, 98.7305152],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_63d40524c4f56f51ebf5bc7385462a30.bindTooltip(
+                `<div>
+                     Labuhan Angin power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_59330c057b9ecd1678e292cbe45ba9e1 = L.circleMarker(
+                [3.375398, 99.441805],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_59330c057b9ecd1678e292cbe45ba9e1.bindTooltip(
+                `<div>
+                     Lamhotma power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c5200dba6bdabcbac36ab73b412660ca = L.circleMarker(
+                [-5.58594, 105.38719],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_c5200dba6bdabcbac36ab73b412660ca.bindTooltip(
+                `<div>
+                     Lampung Sebalang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_673e124da10b19995b737e0e7bbe0aa6 = L.circleMarker(
+                [-8.348033, 116.717168],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_673e124da10b19995b737e0e7bbe0aa6.bindTooltip(
+                `<div>
+                     Lombok 2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e4e2cab1195d6f26135781b4d70a7f2b = L.circleMarker(
+                [-8.285204, 116.603164],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e4e2cab1195d6f26135781b4d70a7f2b.bindTooltip(
+                `<div>
+                     Lombok 3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_add36dcd975e41d9886038a76de0f9fa = L.circleMarker(
+                [-8.573277, 116.351124],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_add36dcd975e41d9886038a76de0f9fa.bindTooltip(
+                `<div>
+                     Lombok 4 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f7eb8e3b6d5dec48f78e218037207fd6 = L.circleMarker(
+                [-8.422056, 116.709629],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f7eb8e3b6d5dec48f78e218037207fd6.bindTooltip(
+                `<div>
+                     Lombok FTP2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3a6314854db1b418636f211bd6c07399 = L.circleMarker(
+                [-7.077733, 113.287085],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_3a6314854db1b418636f211bd6c07399.bindTooltip(
+                `<div>
+                     Madura PTBA power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c430aeb8a49e4efecf0a5dfbc1f7e865 = L.circleMarker(
+                [3.667568, 98.665386],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_c430aeb8a49e4efecf0a5dfbc1f7e865.bindTooltip(
+                `<div>
+                     Medan Steel Mill power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b49fbfae10e1b3ab1766a7d2ebf4e85c = L.circleMarker(
+                [-5.88403, 106.06422],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_b49fbfae10e1b3ab1766a7d2ebf4e85c.bindTooltip(
+                `<div>
+                     Merak power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f40fbd76e670f1442e67b9cb8d20da8f = L.circleMarker(
+                [-4.012776, 105.462956],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f40fbd76e670f1442e67b9cb8d20da8f.bindTooltip(
+                `<div>
+                     Mesuji power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e6f601e7b9504e257c6f9202f1eeff1c = L.circleMarker(
+                [-2.618, 103.127],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e6f601e7b9504e257c6f9202f1eeff1c.bindTooltip(
+                `<div>
+                     Mulut Tambang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_28d53d06b61d722f61b5742e77c47a76 = L.circleMarker(
+                [4.1075504, 96.1988906],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_28d53d06b61d722f61b5742e77c47a76.bindTooltip(
+                `<div>
+                     Nagan Raya power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3b8b958059600755ba9e2778620e795d = L.circleMarker(
+                [4.1156362, 96.2024123],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_3b8b958059600755ba9e2778620e795d.bindTooltip(
+                `<div>
+                     Nagan Raya power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6ab147e8ae48260a75ab9fe222240bcc = L.circleMarker(
+                [1.254, 116.682],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_6ab147e8ae48260a75ab9fe222240bcc.bindTooltip(
+                `<div>
+                     NALCO East Kutai power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8c28eb1a8fd0d532d2c8031d1e3fefbd = L.circleMarker(
+                [0.911643, 104.6505404],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8c28eb1a8fd0d532d2c8031d1e3fefbd.bindTooltip(
+                `<div>
+                     Nanshan Industrial Park power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bd9bd3ef773111c2e29671220900935c = L.circleMarker(
+                [-0.609017, 100.753697],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_bd9bd3ef773111c2e29671220900935c.bindTooltip(
+                `<div>
+                     Ombilin power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_125bf8e8248e3ec307aea7da75148ae1 = L.circleMarker(
+                [-8.257818, 111.373558],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_125bf8e8248e3ec307aea7da75148ae1.bindTooltip(
+                `<div>
+                     Pacitan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fff1172eb7d1acc7aec495b9ab324460 = L.circleMarker(
+                [-7.715299, 113.585706],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_fff1172eb7d1acc7aec495b9ab324460.bindTooltip(
+                `<div>
+                     Paiton-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_71e0cf1af501dc0c723aab270743a1f3 = L.circleMarker(
+                [-7.715299, 113.585706],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_71e0cf1af501dc0c723aab270743a1f3.bindTooltip(
+                `<div>
+                     Paiton-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b27c3ee7495342f262aaf0e7b66ed872 = L.circleMarker(
+                [-7.71446, 113.58326],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_b27c3ee7495342f262aaf0e7b66ed872.bindTooltip(
+                `<div>
+                     Paiton-3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5b3610518a7904c0b0851d2d52e6645c = L.circleMarker(
+                [-1.769, 113.654],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_5b3610518a7904c0b0851d2d52e6645c.bindTooltip(
+                `<div>
+                     Palangkaraya power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a191a4a2253bfcb50beabdf9a5e7a56c = L.circleMarker(
+                [-0.733203, 119.85592],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a191a4a2253bfcb50beabdf9a5e7a56c.bindTooltip(
+                `<div>
+                     Palu power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bee715c8d1cb3c42d1122d0c775c0c91 = L.circleMarker(
+                [4.12071, 98.25823],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_bee715c8d1cb3c42d1122d0c775c0c91.bindTooltip(
+                `<div>
+                     Pangkalan Susu power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2c70f4967de6b9232cdd3baf299c3cb1 = L.circleMarker(
+                [0.05798, 109.20362],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_2c70f4967de6b9232cdd3baf299c3cb1.bindTooltip(
+                `<div>
+                     Parit Baru power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_534abd6990aa2fef23bacaa8c43906c8 = L.circleMarker(
+                [-6.708777, 111.020114],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_534abd6990aa2fef23bacaa8c43906c8.bindTooltip(
+                `<div>
+                     Pati INTP power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1a407eb98abc767a5106817269141803 = L.circleMarker(
+                [0.56437, 101.52345],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_1a407eb98abc767a5106817269141803.bindTooltip(
+                `<div>
+                     Pekanbaru Tenayan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9f72fbf1ceb36a2498d173b9848b3284 = L.circleMarker(
+                [-7.0242, 106.5464],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_9f72fbf1ceb36a2498d173b9848b3284.bindTooltip(
+                `<div>
+                     Pelabuhan Ratu power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_329b19c4f3017da200cea0d76d9ffbdc = L.circleMarker(
+                [0.68932, 101.61907],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_329b19c4f3017da200cea0d76d9ffbdc.bindTooltip(
+                `<div>
+                     Perawang Mill power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3634a2d2481b7e53932c838eb03548dd = L.circleMarker(
+                [-7.711029, 113.570682],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_3634a2d2481b7e53932c838eb03548dd.bindTooltip(
+                `<div>
+                     PLN Paiton Baru power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_884d79c34a5c6b820eabdf8523bb2d34 = L.circleMarker(
+                [-7.7147, 113.585016],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_884d79c34a5c6b820eabdf8523bb2d34.bindTooltip(
+                `<div>
+                     PLN Paiton power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ec32d825c9696f5bef017e9a3bc58425 = L.circleMarker(
+                [-4.179865, 121.592935],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ec32d825c9696f5bef017e9a3bc58425.bindTooltip(
+                `<div>
+                     Pomalaa Nickel power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1c736402921a62824f510eef9bde36ca = L.circleMarker(
+                [-1.5614331, 127.4210337],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_1c736402921a62824f510eef9bde36ca.bindTooltip(
+                `<div>
+                     PT Halmahera Persada Lygend Nickel Smelter power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_28947334616c023f948afc9a5a1f4e87 = L.circleMarker(
+                [-1.53615, 127.416015],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_28947334616c023f948afc9a5a1f4e87.bindTooltip(
+                `<div>
+                     PT Halmahera Persada Lygend Nickel Smelter power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f5dfdf29d4d4fbccb9eff9ad2d9d799c = L.circleMarker(
+                [-2.2578515, 121.769024],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f5dfdf29d4d4fbccb9eff9ad2d9d799c.bindTooltip(
+                `<div>
+                     PT IHIP power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_44f0aa974fe6f9fa3e0f49dc61655758 = L.circleMarker(
+                [-0.554151, 104.429654],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_44f0aa974fe6f9fa3e0f49dc61655758.bindTooltip(
+                `<div>
+                     PT Tianshan Alumina power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_015fd2f1118b4a0a813aaf6f47ddc47e = L.circleMarker(
+                [-5.617881, 119.5511895],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_015fd2f1118b4a0a813aaf6f47ddc47e.bindTooltip(
+                `<div>
+                     Punagaya power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_29db6e3231489a6a694c62942ac3b0e5 = L.circleMarker(
+                [-6.553921, 107.413652],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_29db6e3231489a6a694c62942ac3b0e5.bindTooltip(
+                `<div>
+                     Purwakarta Indorama power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_da85f61b70615895c85dcc9f3115cb70 = L.circleMarker(
+                [-3.04035, 122.261559],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_da85f61b70615895c85dcc9f3115cb70.bindTooltip(
+                `<div>
+                     Qingdao Zhongsheng captive power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ed3538a43abe1769116e55a30fe93167 = L.circleMarker(
+                [-6.636, 111.4749],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ed3538a43abe1769116e55a30fe93167.bindTooltip(
+                `<div>
+                     Rembang power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2ea912730859fe1d8fab49618bf9ed02 = L.circleMarker(
+                [-0.35, 102.533056],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_2ea912730859fe1d8fab49618bf9ed02.bindTooltip(
+                `<div>
+                     Riau-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9d1050808376cef5e34f581958ee1240 = L.circleMarker(
+                [-0.526221, 101.969004],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_9d1050808376cef5e34f581958ee1240.bindTooltip(
+                `<div>
+                     Riau Kemitraan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_635609a45c812d3d7e0b74cdc63ad103 = L.circleMarker(
+                [-3.401381, 104.118633],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_635609a45c812d3d7e0b74cdc63ad103.bindTooltip(
+                `<div>
+                     Shenhua Guohua power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cee2c3a2729448922ea0e16dd589a074 = L.circleMarker(
+                [-1.0069, 103.0821],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_cee2c3a2729448922ea0e16dd589a074.bindTooltip(
+                `<div>
+                     Sinar Mas Jambi Lontar power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d7d2d031136c166666db50874db69bda = L.circleMarker(
+                [-1.61, 101.91],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_d7d2d031136c166666db50874db69bda.bindTooltip(
+                `<div>
+                     Sinar Mas Jambi power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_18d24b94b4f15954a4b990ba7000cf99 = L.circleMarker(
+                [-2.7504201, 105.2782015],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_18d24b94b4f15954a4b990ba7000cf99.bindTooltip(
+                `<div>
+                     Sinar Mas OKI Paper Mill power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_be5a67d2180434b5261754ca5f3cc6ff = L.circleMarker(
+                [-0.876, 131.255],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_be5a67d2180434b5261754ca5f3cc6ff.bindTooltip(
+                `<div>
+                     Sorong power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_698cd412cf15c6eeac6926edb0fd46d5 = L.circleMarker(
+                [-2.8679078, 122.1770864],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_698cd412cf15c6eeac6926edb0fd46d5.bindTooltip(
+                `<div>
+                     Sulawesi Labota power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bcd6a61fb4d79a62af380e2bb2df18b6 = L.circleMarker(
+                [-2.8689871, 122.17188],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_bcd6a61fb4d79a62af380e2bb2df18b6.bindTooltip(
+                `<div>
+                     Sulawesi Labota power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_68339cb10f8b5e4a17e2f825688bf4b6 = L.circleMarker(
+                [-2.8688307, 122.1692807],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_68339cb10f8b5e4a17e2f825688bf4b6.bindTooltip(
+                `<div>
+                     Sulawesi Labota power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_84ea33e0f97b6d5aef92ac97d1466dc6 = L.circleMarker(
+                [-2.8295432, 122.1551372],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_84ea33e0f97b6d5aef92ac97d1466dc6.bindTooltip(
+                `<div>
+                     Sulawesi Mining power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0185c0964c4abca6104bf3e1af202062 = L.circleMarker(
+                [-2.827384, 122.1552699],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_0185c0964c4abca6104bf3e1af202062.bindTooltip(
+                `<div>
+                     Sulawesi Mining power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bc189cfa4bf55afdcc48a7ccd1051a5e = L.circleMarker(
+                [-2.8255878, 122.1554483],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_bc189cfa4bf55afdcc48a7ccd1051a5e.bindTooltip(
+                `<div>
+                     Sulawesi Mining power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_55951f7e844e7e512255fd2497c01a25 = L.circleMarker(
+                [-4.8, 119.9],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_55951f7e844e7e512255fd2497c01a25.bindTooltip(
+                `<div>
+                     Sulawesi Star power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f1397b9c5d291be80714281bf9d19d5e = L.circleMarker(
+                [-3.821501, 121.972097],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f1397b9c5d291be80714281bf9d19d5e.bindTooltip(
+                `<div>
+                     Sulbagsel-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_dd867a6cb57f733fe5f2f0fd56436ef4 = L.circleMarker(
+                [-3.814451, 122.447753],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_dd867a6cb57f733fe5f2f0fd56436ef4.bindTooltip(
+                `<div>
+                     Sulbagsel-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0b31ff109275950411896f5a2fa484cf = L.circleMarker(
+                [0.942698, 122.941575],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_0b31ff109275950411896f5a2fa484cf.bindTooltip(
+                `<div>
+                     Sulbagut-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_463398ef9f76db90b81e46aa0d36111b = L.circleMarker(
+                [1.185709, 124.474885],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_463398ef9f76db90b81e46aa0d36111b.bindTooltip(
+                `<div>
+                     Sulbagut-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_ff89823e768de06bc69ab7e3754e9d67 = L.circleMarker(
+                [0.868701, 123.96431],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_ff89823e768de06bc69ab7e3754e9d67.bindTooltip(
+                `<div>
+                     Sulbagut-3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_541e8dc0683c8d2047cd6b7d3edb9ec0 = L.circleMarker(
+                [-5.70008, 119.725767],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_541e8dc0683c8d2047cd6b7d3edb9ec0.bindTooltip(
+                `<div>
+                     Sulsel-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4c1c957553a848c8e970a168b07e6e4d = L.circleMarker(
+                [0.890184, 123.470106],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_4c1c957553a848c8e970a168b07e6e4d.bindTooltip(
+                `<div>
+                     Sulut-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2a2cbd4d1b754f1c3102dd1864d7e75c = L.circleMarker(
+                [1.374331, 125.085455],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_2a2cbd4d1b754f1c3102dd1864d7e75c.bindTooltip(
+                `<div>
+                     Sulut-3 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_864696344031909a8f743fde03f63a8f = L.circleMarker(
+                [0.5897, 101.3431],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_864696344031909a8f743fde03f63a8f.bindTooltip(
+                `<div>
+                     Sumatera Hybrid power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cff288057361b6ccc193e1c395bcf033 = L.circleMarker(
+                [-4.10589, 103.99474],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_cff288057361b6ccc193e1c395bcf033.bindTooltip(
+                `<div>
+                     Sumbagsel-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e66d601c253bce8fb6133e1b4e3d2242 = L.circleMarker(
+                [1.7176, 98.7265],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e66d601c253bce8fb6133e1b4e3d2242.bindTooltip(
+                `<div>
+                     Sumbagut (Sibolga Baru) power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_295689aa053661c07e79070d36002d56 = L.circleMarker(
+                [-8.747981, 117.957654],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_295689aa053661c07e79070d36002d56.bindTooltip(
+                `<div>
+                     Sumbawa-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7795ae6fc31c188e40fe256b8a8f0ad5 = L.circleMarker(
+                [-2.75, 103.833333],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_7795ae6fc31c188e40fe256b8a8f0ad5.bindTooltip(
+                `<div>
+                     Sumsel-10 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_761064e2d82e86c3285f0d0112246807 = L.circleMarker(
+                [-3.476667, 103.999167],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_761064e2d82e86c3285f0d0112246807.bindTooltip(
+                `<div>
+                     Sumsel-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8ab9450992cbb6ddbb3c15cc9a1bad88 = L.circleMarker(
+                [-2.1562529, 103.7552716],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8ab9450992cbb6ddbb3c15cc9a1bad88.bindTooltip(
+                `<div>
+                     Sumsel-5 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_4c6a433b87a8d21de1f0274dc0d2b0db = L.circleMarker(
+                [-2.355761, 103.44339],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_4c6a433b87a8d21de1f0274dc0d2b0db.bindTooltip(
+                `<div>
+                     Sumsel-6 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_027063aeea7834e91164b5b0b258f332 = L.circleMarker(
+                [-2.604, 103.914],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_027063aeea7834e91164b5b0b258f332.bindTooltip(
+                `<div>
+                     Sumsel-7 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5023c5c969cfcb90e83b7826cfe606f3 = L.circleMarker(
+                [3.78025, 98.63694],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_5023c5c969cfcb90e83b7826cfe606f3.bindTooltip(
+                `<div>
+                     Sumut-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_df31b6cca7f9c46e499b7581284cc974 = L.circleMarker(
+                [-2.163427, 115.440814],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_df31b6cca7f9c46e499b7581284cc974.bindTooltip(
+                `<div>
+                     Tabalong power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_d558809ddd676170729337cafe355953 = L.circleMarker(
+                [-2.158586, 115.445925],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_d558809ddd676170729337cafe355953.bindTooltip(
+                `<div>
+                     Tabalong Wisesa power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bb6a3913157ddc360b6205629ef4c468 = L.circleMarker(
+                [-5.623635, 119.550822],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_bb6a3913157ddc360b6205629ef4c468.bindTooltip(
+                `<div>
+                     Takalar power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7ebc6258bf96ece9b1444c3327ec8df1 = L.circleMarker(
+                [-6.810524, 111.995503],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_7ebc6258bf96ece9b1444c3327ec8df1.bindTooltip(
+                `<div>
+                     Tanjung Awar-Awar power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9ce74b82967912d28df4da3b5d58224f = L.circleMarker(
+                [-6.768519, 108.6451913],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_9ce74b82967912d28df4da3b5d58224f.bindTooltip(
+                `<div>
+                     Tanjung Jati A power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_10ed54b557c6a19b1c3c19da4adf2d9f = L.circleMarker(
+                [-6.4447822, 110.743491],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_10ed54b557c6a19b1c3c19da4adf2d9f.bindTooltip(
+                `<div>
+                     Tanjung Jati B power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_856c6fe5e2879ac3f76d0681d14d0d33 = L.circleMarker(
+                [-6.446, 110.7423],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_856c6fe5e2879ac3f76d0681d14d0d33.bindTooltip(
+                `<div>
+                     Tanjung Jati B power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_e335f80aa29294c31212b9507fac104e = L.circleMarker(
+                [-6.446488, 110.742359],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_e335f80aa29294c31212b9507fac104e.bindTooltip(
+                `<div>
+                     Tanjung Jati B power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_73aaf15dea9ccd90715dbf023a97675b = L.circleMarker(
+                [1.044137, 104.135714],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_73aaf15dea9ccd90715dbf023a97675b.bindTooltip(
+                `<div>
+                     Tanjung Kasam power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_0552f5b508740015645fa4eb8337568e = L.circleMarker(
+                [4.110192, 98.219131],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_0552f5b508740015645fa4eb8337568e.bindTooltip(
+                `<div>
+                     Tanjung Pasir power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a4ffda6df3968a7ba0164a8c0414bfc9 = L.circleMarker(
+                [-5.521207, 105.353477],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 5, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_a4ffda6df3968a7ba0164a8c0414bfc9.bindTooltip(
+                `<div>
+                     Tarahan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_34e40afcdd11bdf6a7bc4b75c38bd8cd = L.circleMarker(
+                [3.3, 117.633333],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_34e40afcdd11bdf6a7bc4b75c38bd8cd.bindTooltip(
+                `<div>
+                     Tarakan power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_74f6b62d09c3c612fc2782ad8c106bb2 = L.circleMarker(
+                [-1.07655, 100.3724],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_74f6b62d09c3c612fc2782ad8c106bb2.bindTooltip(
+                `<div>
+                     Teluk Sirih power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3c417f9d2262b922a9dd4af4bf69053a = L.circleMarker(
+                [-3.539482, 103.754844],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_3c417f9d2262b922a9dd4af4bf69053a.bindTooltip(
+                `<div>
+                     Timah South Sumatra power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_cb19cebc99aedb2edd517bfd5420f29b = L.circleMarker(
+                [-10.351964, 123.459882],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_cb19cebc99aedb2edd517bfd5420f29b.bindTooltip(
+                `<div>
+                     Timor-1 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b84fd46a511cbdf1bf49120e2138d6bf = L.circleMarker(
+                [-10.357382, 123.45931],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_b84fd46a511cbdf1bf49120e2138d6bf.bindTooltip(
+                `<div>
+                     Timor-2 power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_875cadda57e7d2998c3205932a835499 = L.circleMarker(
+                [-7.436835, 112.468802],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_875cadda57e7d2998c3205932a835499.bindTooltip(
+                `<div>
+                     Tjiwi Kimia Paper Mill power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f97b049e806bf58d4fb3aacccc734e11 = L.circleMarker(
+                [-4.816711, 119.501684],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f97b049e806bf58d4fb3aacccc734e11.bindTooltip(
+                `<div>
+                     Tonasa Cement Plant power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8351ce8ac8a0d65b2556766b15386c9e = L.circleMarker(
+                [-2.730952, 122.030621],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_8351ce8ac8a0d65b2556766b15386c9e.bindTooltip(
+                `<div>
+                     Wanxiang Nickel Indonesia power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_972c5222a5ccd3fb524e3f3612e10b72 = L.circleMarker(
+                [0.478894, 127.984206],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_972c5222a5ccd3fb524e3f3612e10b72.bindTooltip(
+                `<div>
+                     Weda Bay power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f80a429dcc8ba2921c77c2aa39fec759 = L.circleMarker(
+                [0.4761609, 128.0081471],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_f80a429dcc8ba2921c77c2aa39fec759.bindTooltip(
+                `<div>
+                     Weda Bay power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c9815480115a6aad808b5932a15d9bb6 = L.circleMarker(
+                [-1.530514, 127.418975],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_c9815480115a6aad808b5932a15d9bb6.bindTooltip(
+                `<div>
+                     Xinxing Ductile Iron Pipes power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_fbc9d11365d655d808dbf1e65ceb04ad = L.circleMarker(
+                [0.86008, 104.1801],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 2, "stroke": true, "weight": 3}
+            ).addTo(map_597436e33d73cd580aa5858ad6849e76);
+        
+    
+            circle_marker_fbc9d11365d655d808dbf1e65ceb04ad.bindTooltip(
+                `<div>
+                     Xinyi Group captive power station
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>

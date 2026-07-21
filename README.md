@@ -3,10 +3,13 @@
 **Adaptation of regional CO2 storage screening methodologies for priority CCS basins in Indonesia — fully open-source & reproducible.**
 
 > Project status: 🚧 **Prototype (Tier 1 functional, Tier 2 functional)**.
-> Most numerical data currently used are **illustrative placeholders** —
-> read [`docs/methodology.md`](docs/methodology.md) before citing any figures
-> from this repo. See [`docs/data_provenance.md`](docs/data_provenance.md)
-> for a full list of planned original data sources.
+> Tier 2 now uses **real digitized Sunda-Asri boundary & fault traces** in
+> `data/processed/`. Some other inputs (depth surface without GEBCO/GlobSed,
+> porosity-depth decay, Tier 1 sample emitters) are still **illustrative
+> placeholders** — read [`docs/methodology.md`](docs/methodology.md) before
+> citing any figures from this repo. See
+> [`docs/data_provenance.md`](docs/data_provenance.md) for a full list of
+> data sources and their real-vs-illustrative status.
 
 ---
 
@@ -22,6 +25,8 @@ This project adapts two frameworks from recent literature:
 | Nooraiepour et al. (2025), *Geological CO2 storage assessment in emerging CCS regions: ... Poland*, IJGGC 148 | Strategic framework for emerging CCS regions: **resource-reserve pyramid** & **Storage Readiness Level (SRL)**, as well as an open approach to data limitations [docs/methodology.md] |
 
 Indonesia is currently in the same "emerging CCS region" position as Poland in the second paper — many potential basins, significant industry interest, but no public well/pressure data available [docs/methodology.md]. Therefore, the project strategy is: **use the Poland framework to set realistic ambition levels (SRL 1–2), and use the Malay Basin techniques for parts where data allows.**
+
+`figures/figure1_location_map.png` gives the regional context for this choice at a glance: Indonesia's priority basins (Sunda-Asri, Bintuni) plotted alongside the Malay Basin (technical-workflow analogue) and Poland (strategic-framework analogue).
 
 ---
 
@@ -66,6 +71,8 @@ ccs-screening/
 │   ├── methodology.md      # methodology adaptation + limitations (MUST READ)
 │   └── data_provenance.md  # data sources, licenses, download status, real-vs-illustrative file map
 ├── figures/           # all generated PNGs/HTML (Tier 1: tier1_*, Tier 2: tier2_*)
+│   ├── figure1_location_map.png  # regional context map (Indonesia priority basins vs. MB/PL analogues)
+│   └── real/          # manuscript/poster-prep figures using real digitized data (Phase 7, see Roadmap)
 └── app/               # (planned) interactive dashboard
 ```
 
@@ -136,6 +143,19 @@ Tabular results are exported to `data/processed/sunda_asri_capacity_results.csv`
 
 ---
 
+## Supplementary / publication figures
+
+A few figures in `figures/` are **not** produced by the notebooks — they're prepared by hand for the poster/short-paper deliverable planned under Roadmap Phase 7, and are kept separate so it's clear they sit outside the reproducible pipeline:
+
+- `figures/figure1_location_map.png` — regional context map: Indonesia's priority basins (Sunda-Asri, Bintuni) alongside the Malay Basin and Poland, the two analogues this project adapts (see [Why this project exists](#why-this-project-exists)).
+- `figures/real/tier1_indonesia_basins_map.html` — a draft/alternate layered basin map, distinct from the auto-generated `figures/tier1_indonesia_basins_map.html` produced by the Tier 1 notebook.
+
+> Note: this project no longer benchmarks its illustrative capacity figures against external literature estimates (Hedriana et al., 2017; Iskandar et al., 2013) — those figures cover different basin/formation scopes and weren't a meaningful sanity check for this project's numbers. See Roadmap Phase 6 below.
+
+These are draft materials, not additional pipeline outputs — treat any numbers inside them with the same "illustrative vs. real" caveats as everything else in this repo (§ [Limitations](#limitations-read-before-citing)).
+
+---
+
 ## Roadmap
 
 - [x] Phase 0 — Scaffold repo, config parameters, core module validation
@@ -144,8 +164,8 @@ Tabular results are exported to `data/processed/sunda_asri_capacity_results.csv`
 - [~] Phase 3 — GEBCO + GlobSed integration: **wired and tested**, notebook uses real grids automatically when present in `data/raw/`, otherwise falls back to a clearly-labelled synthetic depth surface
 - [~] Phase 4 — Global Energy Monitor tracker ingestion: `src/ingest_raw_data.py` implemented in this repo (converts raw Coal/Cement/Oil&Gas GEM trackers into `data/raw/indonesia_emitters_real.csv`, auto-detected by the Tier 1 notebook). Still `[~]` because it requires the trackers to be downloaded manually first (GEM access form) — run `python3 src/fetch_open_data.py --mode real` for instructions, then `python3 src/ingest_raw_data.py`.
 - [x] Phase 5 — Tier 2: full Sunda-Asri workflow (porosity + CO2 density + fault-distance cut-off → DBSCAN with area filter → Monte Carlo), using real `co2_thermophysics.py` (CoolProp) throughout
-- [ ] Phase 6 — Benchmarking vs Hedriana et al. (2017) & Iskandar et al. (2013)
-- [ ] Phase 7 — Interactive dashboard + poster + short paper
+- [x] ~~Phase 6 — Benchmarking vs Hedriana et al. (2017) & Iskandar et al. (2013)~~ — **dropped**: those literature figures don't map cleanly onto this project's basin/formation scope, so they're no longer used as a sanity check. Confidence now comes from using real digitized Sunda-Asri boundary/fault data (Phase 2) instead.
+- [~] Phase 7 — Interactive dashboard + poster + short paper: **draft poster/manuscript figure started** (`figures/figure1_location_map.png`) — dashboard (`app/`) and full poster/paper text not yet started.
 
 `[~]` = functional with a working fallback, but not yet using fully real, digitized/downloaded data end-to-end. This distinction matters — see `docs/data_provenance.md` for exactly which files are real vs. illustrative in any given run (every notebook prints its active data source explicitly).
 
@@ -155,10 +175,11 @@ Tabular results are exported to `data/processed/sunda_asri_capacity_results.csv`
 
 This project does not yet have access to confidential proprietary well data (stratigraphic tops, core/wireline logs, drill-stem formation pressure tests). Results are capped at SRL 1–2 compliance. Specifically, unless you have supplied your own real files in `data/raw/` and `data/processed/` (see `docs/data_provenance.md`):
 
-- The Sunda-Asri basin boundary and fault traces are **hand-drawn illustrative placeholders**, not digitizations of official Badan Geologi map sheets.
+- The Sunda-Asri basin boundary and fault traces now use **real digitized data** in `data/processed/` (see `docs/data_provenance.md`); the hand-drawn illustrative versions in `data/external/` remain only as a fallback for anyone cloning the repo without those files.
 - The depth surface is a **synthetic bowl-shaped proxy** (deepens toward the basin centroid within a plausible depth range), not a real depth-structure map — used only when GEBCO/GlobSed NetCDF grids are absent from `data/raw/`.
 - Reservoir thickness ($h$), net-to-gross (NTG), and the porosity-depth decay rate are generic proxies (`config.yaml` §`tier2_reservoir_proxy`), not calibrated to local well/core data.
 - No mapped overpressure zones for Sunda-Asri yet — hydrostatic pressure gradient assumed everywhere.
+- This project does not benchmark its illustrative Tier 1 capacity figures against external literature estimates — see Roadmap Phase 6.
 
 What **is** real physics regardless of data availability: CO2 density and phase are computed from the actual CoolProp equation of state (`src/co2_thermophysics.py`), not an empirical approximation, and the Monte Carlo capacity calculation follows Goodman et al. (2011) exactly as implemented and unit-tested in `src/montecarlo_capacity.py`. Every notebook explicitly prints which inputs were real vs. illustrative for a given run — always check that output before citing a number. Full details are in `docs/methodology.md` §4.
 
