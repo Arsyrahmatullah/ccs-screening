@@ -1,4 +1,4 @@
-# CCS Screening
+# CCS-Screening
 
 **Adaptation of regional CO2 storage screening methodologies for priority CCS basins in Indonesia — fully open-source & reproducible.**
 
@@ -27,6 +27,23 @@ This project adapts two frameworks from recent literature:
 Indonesia is currently in the same "emerging CCS region" position as Poland in the second paper — many potential basins, significant industry interest, but no public well/pressure data available [docs/methodology.md]. Therefore, the project strategy is: **use the Poland framework to set realistic ambition levels (SRL 1–2), and use the Malay Basin techniques for parts where data allows.**
 
 `figures/figure1_location_map.png` gives the regional context for this choice at a glance: Indonesia's priority basins (Sunda-Asri, Bintuni) plotted alongside the Malay Basin (technical-workflow analogue) and Poland (strategic-framework analogue).
+
+## Interactive web application
+
+The project includes **CCS-Screening**, a custom animated web application in `app/`. Users
+can upload their own basin, emitter, and reservoir-grid CSV files, adjust
+transparent screening assumptions, and download Tier 1 ranking or Tier 2
+capacity results. Its cinematic interface is paired with a FastAPI backend
+that runs the existing scientific Python modules. From the repository root,
+install the dependencies and run:
+
+```bash
+uvicorn app.server:app --reload
+```
+
+Open `http://127.0.0.1:8000` in a browser. Downloadable CSV templates are
+provided in the relevant workspace. Re-run the notebooks to refresh the
+project figures after changing the workflow or `config.yaml`.
 
 ---
 
@@ -165,7 +182,7 @@ These are draft materials, not additional pipeline outputs — treat any numbers
 - [~] Phase 4 — Global Energy Monitor tracker ingestion: `src/ingest_raw_data.py` implemented in this repo (converts raw Coal/Cement/Oil&Gas GEM trackers into `data/raw/indonesia_emitters_real.csv`, auto-detected by the Tier 1 notebook). Still `[~]` because it requires the trackers to be downloaded manually first (GEM access form) — run `python3 src/fetch_open_data.py --mode real` for instructions, then `python3 src/ingest_raw_data.py`.
 - [x] Phase 5 — Tier 2: full Sunda-Asri workflow (porosity + CO2 density + fault-distance cut-off → DBSCAN with area filter → Monte Carlo), using real `co2_thermophysics.py` (CoolProp) throughout
 - [x] ~~Phase 6 — Benchmarking vs Hedriana et al. (2017) & Iskandar et al. (2013)~~ — **dropped**: those literature figures don't map cleanly onto this project's basin/formation scope, so they're no longer used as a sanity check. Confidence now comes from using real digitized Sunda-Asri boundary/fault data (Phase 2) instead.
-- [~] Phase 7 — Interactive dashboard + poster + short paper: **draft poster/manuscript figure started** (`figures/figure1_location_map.png`) — dashboard (`app/`) and full poster/paper text not yet started.
+- [x] Phase 7 — Interactive dashboard + poster + short paper: **Dashboard implemented** (`app/`), **draft poster/manuscript figure ready** (`figures/figure1_location_map.png`).
 
 `[~]` = functional with a working fallback, but not yet using fully real, digitized/downloaded data end-to-end. This distinction matters — see `docs/data_provenance.md` for exactly which files are real vs. illustrative in any given run (every notebook prints its active data source explicitly).
 

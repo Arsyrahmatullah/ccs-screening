@@ -1,0 +1,5 @@
+x_km,y_km,depth_m,porosity_percent,co2_density_kgm3,fault_distance_km
+0,0,1200,15,650,5.2
+1,0,1250,14,670,4.8
+0,1,1220,14.5,660,5.0
+1,1,1280,13.8,680,4.5

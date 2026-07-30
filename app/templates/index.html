@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0d1d1a">
+    <title>CCS-Screening | Indonesia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="scroll-line"><span id="scroll-progress"></span></div>
+    <header class="topbar">
+      <a class="wordmark" href="#mission"><span class="wordmark-mark"></span>CCS-SCREENING</a>
+      <nav aria-label="Primary navigation">
+        <a href="#method">Methodology</a><a href="#lab">Lab</a><a href="#archive">Evidence</a>
+      </nav>
+      <a class="nav-cta" href="#lab">Open the lab <span>+</span></a>
+    </header>
+    <main>
+      <section class="hero-container" id="mission">
+        <div class="hero-sticky">
+          <div class="hero-background" aria-hidden="true">
+            <div class="hero-orbits"><i></i><i></i><i></i><b></b></div>
+            <div class="hero-grid-lines"></div>
+          </div>
+          <div class="hero-content">
+            <div class="hero-slide active" data-zoom="1">
+              <p class="eyebrow">CCS-SCREENING / SUSTAINABLE GEOSCIENCE / INDONESIA</p>
+              <h1>Decarbonize<br>the <em>Deep</em>.</h1>
+              <p class="hero-lede">A data-driven screening framework adapted from international benchmarks to identify high-integrity CO2 storage sites in Indonesia.</p>
+              <div class="scroll-hint"><span>Scroll to descend</span><i>↓</i></div>
+            </div>
+            <div class="hero-slide" data-zoom="2">
+              <p class="eyebrow">THE OBJECTIVE</p>
+              <h2>From Emissions<br>to <em>Sequestration</em>.</h2>
+              <p class="hero-lede">Mapping the path from industrial hubs to safe, deep-saline aquifers using physics-based screening cut-offs.</p>
+            </div>
+            <div class="hero-slide" data-zoom="4">
+              <p class="eyebrow">THE EVIDENCE</p>
+              <h2>Science over<br><em>Speculation</em>.</h2>
+              <p class="hero-lede">SRL 1-2 transparency. We use real CoolProp thermophysics and DBSCAN connectivity to reveal true storage potential.</p>
+              <a class="round-link" href="#method"><span>Enter<br>Method</span><i>↓</i></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="scrolly-method" id="method">
+        <div class="scrolly-sticky">
+          <div class="scrolly-visual">
+            <div class="method-diagram" id="method-diagram">
+              <div class="diagram-layer" data-layer="1">
+                <div class="srl-pyramid"><span>SRL 3+</span><span>SRL 2</span><span>SRL 1</span></div>
+                <small>Storage Readiness Level Framework [PL]</small>
+              </div>
+              <div class="diagram-layer" data-layer="2">
+                <div class="tectonic-grid">
+                  <div class="grid-box high">Back-Arc</div><div class="grid-box medium">Intra-Arc</div><div class="grid-box low">Fore-Arc</div>
+                </div>
+                <small>Geological Suitability Matrix [MB]</small>
+              </div>
+              <div class="diagram-layer" data-layer="3">
+                <div class="formula-box">\[ M_{CO2} = A \cdot h \cdot NTG \cdot \phi \cdot (1 - S_{wirr}) \cdot E \cdot \rho_{CO2} \]</div>
+                <small>Volumetric Capacity Logic [Goodman]</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="scrolly-content">
+          <article class="method-step" data-layer="1">
+            <p class="eyebrow">METHODOLOGY / 01</p>
+            <h2>Storage Readiness<br>Level (SRL).</h2>
+            <p>Following Nooraiepour et al. (2025), we classify basins on a 1-9 maturity scale. Our prototype focuses on the critical jump from <strong>SRL 1 (Inventory)</strong> to <strong>SRL 2 (Systematically Mapped)</strong>.</p>
+          </article>
+          <article class="method-step" data-layer="2">
+            <p class="eyebrow">METHODOLOGY / 02</p>
+            <h2>Tectonic<br>Integrity Filters.</h2>
+            <p>Geology is the first gate. We prioritize <strong>Back-Arc & Passive Margin</strong> settings for their superior reservoir-seal duos, while active Fore-Arc basins are disqualified for structural risk.</p>
+          </article>
+          <article class="method-step" data-layer="3">
+            <p class="eyebrow">METHODOLOGY / 03</p>
+            <h2>Triple Cut-off<br>Verification.</h2>
+            <p>For site-specific screening, we apply three simultaneous gates: <strong>Porosity (%)</strong>, <strong>CO2 Density (kg/m³)</strong>, and <strong>Fault Setbacks (km)</strong> to identify high-integrity clusters.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="flight">
+        <div class="flight-sticky">
+          <div class="flight-visual" aria-hidden="true">
+            <div class="planet"><span></span><span></span><span></span></div>
+            <div class="scan-ring ring-a"></div><div class="scan-ring ring-b"></div><div class="scan-ring ring-c"></div>
+            <div class="crosshair"></div>
+          </div>
+          <div class="flight-caption" id="flight-caption"><span>01</span><strong>Locate the signal.</strong><p>Map capture demand against candidate storage basins.</p></div>
+        </div>
+        <article class="flight-step" data-step="01" data-title="Locate the signal." data-copy="Map capture demand against candidate storage basins."><p class="eyebrow">01 / EMISSION GRAVITY</p><h3>Every storage story starts above ground.</h3><p>Great-circle distance and a gravity-style accessibility index bring emission clusters and prospective basins into one transparent screen.</p></article>
+        <article class="flight-step" data-step="02" data-title="Descend through the grid." data-copy="Test reservoir conditions, one cell at a time."><p class="eyebrow">02 / RESERVOIR FIELD</p><h3>Then we travel below the surface.</h3><p>Porosity, CO2 density, and fault distance create a first-pass picture of which parts of a formation can safely enter the conversation.</p></article>
+        <article class="flight-step" data-step="03" data-title="Keep only what connects." data-copy="Cluster compatible cells into project-scale zones."><p class="eyebrow">03 / CONNECTIVITY</p><h3>Potential becomes a place when it holds together.</h3><p>DBSCAN separates isolated points from connected optimal zones, retaining only areas that satisfy a project-scale threshold.</p></article>
+        <article class="flight-step" data-step="04" data-title="Measure uncertainty." data-copy="Express storage capacity as a range, not a promise."><p class="eyebrow">04 / CAPACITY RANGE</p><h3>The honest answer is never one number.</h3><p>Monte Carlo sampling reports P10, P50, and P90 outcomes so uncertainty stays part of the result, not a footnote.</p></article>
+      </section>
+
+      <section class="prototype-showcase section-pad" id="archive">
+        <div class="evidence-head"><p class="eyebrow reveal">02 / PROTOTYPE OUTPUTS</p><h2 class="reveal">From National Signal to <em>Reservoir Cluster.</em></h2></div>
+        <div class="showcase-grid">
+          <div class="showcase-item reveal">
+            <div class="item-label"><span class="panel-number">TIER 1</span><strong>National Ranking</strong></div>
+            <img src="/figures/top_basins_final_ranking.png" alt="Tier 1 top basins">
+            <p>A multi-criteria screening based on the cost-effective final rank (60% proximity, 40% volume), identifying Sunda Asri as the top-priority candidate for Indonesia.</p>
+          </div>
+          <div class="showcase-item reveal">
+            <div class="item-label"><span class="panel-number">TIER 2</span><strong>Sunda-Asri Deep-Dive</strong></div>
+            <img src="/figures/tier2_06_clusters.png" alt="Tier 2 clusters">
+            <p>Moving beneath the seabed to identify spatially connected optimal zones within the Sunda-Asri Basin.</p>
+          </div>
+        </div>
+        <div class="showcase-note reveal">
+          <p><strong>The Scientific Gap:</strong> Tier 1 identifies *where* to look (Strategic Signal). Tier 2 identifies *what* is there (Quantified Opportunity).</p>
+        </div>
+      </section>
+
+      <section class="lab section-pad" id="lab">
+        <div class="lab-intro reveal">
+          <p class="eyebrow">03 / THE LIVE LAB</p>
+          <h2>Bring your own evidence.<br><em>Run the method.</em></h2>
+          <div class="lab-guide body-copy">
+            <p><strong>How to use this lab:</strong></p>
+            <ol>
+              <li>Select your screening tier (National or Reservoir).</li>
+              <li>Prepare your CSV data using the templates below.</li>
+              <li>Upload your files and adjust the scientific cut-offs.</li>
+              <li>Run the analysis to reveal optimal storage signals.</li>
+            </ol>
+          </div>
+        </div>
+        <div class="lab-shell reveal">
+          <div class="lab-tabs" role="tablist"><button class="lab-tab active" data-panel="tier1" role="tab">01 / National screen</button><button class="lab-tab" data-panel="tier2" role="tab">02 / Reservoir screen</button></div>
+          <section class="lab-panel active" id="tier1" role="tabpanel">
+            <div class="panel-copy"><span class="panel-number">01</span><h3>Trace the path from emissions to storage.</h3><p>Rank basin candidates by nearby emitter access, combined with tectonic and exploration maturity gates.</p><details><summary>Scientific CSV schema</summary><p><b>Basin:</b> basin, lat, lon, status, basin_type, storage_capacity_gt.<br><b>Emitter:</b> name, lat, lon, annual_co2_mtpa.</p><a href="/static/templates/basin_template.csv" download>Download scientific basin template</a><a href="/static/templates/emitter_template.csv" download>Download emitter template</a></details></div>
+            <form class="analysis-form" id="tier1-form">
+              <label class="dropzone"><input type="file" name="basins" accept=".csv" required><span class="file-mark">+</span><strong>Upload scientific basins</strong><small>CSV / status, basin_type, volume</small></label>
+              <label class="dropzone"><input type="file" name="emitters" accept=".csv" required><span class="file-mark">+</span><strong>Upload emission sources</strong><small>CSV / annual emissions data</small></label>
+              <div class="form-row"><label>Search radius <output data-output="radius_km">200 km</output><input type="range" name="radius_km" min="25" max="500" step="25" value="200"></label><label>Capacity weight <output data-output="capacity_weight">40%</output><input type="range" name="capacity_weight" min="0" max="1" step="0.05" value="0.4"></label></div>
+              <button class="run-button" type="submit"><span>Run national screening</span><i>→</i></button>
+            </form>
+          </section>
+          <section class="lab-panel" id="tier2" role="tabpanel">
+            <div class="panel-copy"><span class="panel-number">02</span><h3>Turn a reservoir grid into an opportunity field.</h3><p>Classify every grid cell, preserve connected zones, and estimate a probabilistic capacity range.</p><details><summary>CSV schema and templates</summary><p><b>Grid:</b> x_km, y_km, depth_m (or porosity/density columns).<br><b>Optional:</b> fault_traces.csv, basin_boundary.csv.</p><a href="/static/templates/reservoir_grid_template.csv" download>Download grid template</a><a href="/static/templates/fault_traces_template.csv" download>Download faults template</a><a href="/static/templates/basin_boundary_template.csv" download>Download boundary template</a></details></div>
+            <form class="analysis-form" id="tier2-form">
+              <label class="dropzone wide"><input type="file" name="grid" accept=".csv" required><span class="file-mark">+</span><strong>Upload reservoir grid</strong><small>Primary CSV / x_km, y_km, depth_m</small></label>
+              <div class="form-row">
+                <label class="dropzone"><input type="file" name="fault_traces" accept=".csv"><span class="file-mark">+</span><strong>Fault traces</strong><small>CSV / lon, lat</small></label>
+                <label class="dropzone"><input type="file" name="basin_boundary" accept=".csv"><span class="file-mark">+</span><strong>Basin boundary</strong><small>CSV / lon, lat</small></label>
+              </div>
+              <div class="form-row">
+                <label class="dropzone"><input type="file" name="depth_surface" accept=".csv"><span class="file-mark">+</span><strong>Depth surface</strong><small>CSV / reference grid</small></label>
+                <label class="dropzone"><input type="file" name="heat_flow" accept=".csv"><span class="file-mark">+</span><strong>Heat-flow data</strong><small>CSV / thermal points</small></label>
+              </div>
+              <div class="input-grid">
+                <label>Optimal porosity (%)<input type="number" name="optimal_porosity" value="10" min="0" step="0.1"></label>
+                <label>CO2 density (kg/m3)<input type="number" name="optimal_density" value="300" min="0"></label>
+                <label>Fault buffer (km)<input type="number" name="optimal_fault_buffer" value="2" min="0" step="0.1"></label>
+                <label>Cell area (km2)<input type="number" name="cell_area_km2" value="1" min="0.001" step="0.1"></label>
+                <label>Min. cluster area (km2)<input type="number" name="minimum_cluster_area_km2" value="100" min="0.1"></label>
+                <label>DBSCAN radius<input type="number" name="dbscan_eps" value="2" min="0.01" step="0.1"></label>
+              </div>
+              <button class="run-button" type="submit"><span>Run reservoir screening</span><i>→</i></button>
+            </form>
+          </section>
+        </div>
+        <div class="result-shell" id="results" aria-live="polite"><div class="result-empty"><span>ORBIT IS READY</span><p>Run a workflow to reveal the result.</p></div></div>
+      </section>
+    </main>
+    <footer><a class="wordmark" href="#mission"><span class="wordmark-mark"></span>CCS-SCREENING</a><p>Indonesia CCS Screening / Scientific Research Prototype / SRL 1-2</p><a href="https://github.com/Arsyrahmatullah/ccs-screening" target="_blank" rel="noreferrer">Source repository ↗</a></footer>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

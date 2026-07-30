@@ -504,16 +504,29 @@ else:
 md("""## 5. Summary Visualization (Publication-Grade)""")
 
 code(r"""
-sns.set_theme(style="whitegrid")
+# --- DARK THEME STYLING (App-Consistent) ---
+plt.style.use('dark_background')
+plt.rcParams.update({
+    "figure.facecolor": "#0d1d1a",
+    "axes.facecolor": "#0d1d1a",
+    "axes.edgecolor": "#162a26",
+    "grid.color": "#162a26",
+    "text.color": "#f1f5f9",
+    "axes.labelcolor": "#f1f5f9",
+    "xtick.color": "#94a3b8",
+    "ytick.color": "#94a3b8",
+    "font.family": "sans-serif"
+})
+
 figures_dir = REPO_ROOT / "figures"
 figures_dir.mkdir(parents=True, exist_ok=True)
 
 # Unified color mapping for Tectonic Classes
 palette_colors = {
-    "Back-Arc / Passive Margin": "#2B6CB0",        # Safe / High Priority (Blue)
-    "Intra-Arc / Rift / Foreland": "#C53030",      # Caution / Medium (Red)
-    "Fore-Arc / Deep Oceanic": "#718096",          # High Risk (Gray)
-    "Unclassified / Intermediate": "#ED8936"       # Unknown (Orange)
+    "Back-Arc / Passive Margin": "#2dd4bf",        # Cyan
+    "Intra-Arc / Rift / Foreland": "#fb923c",      # Coral
+    "Fore-Arc / Deep Oceanic": "#94a3b8",          # Muted
+    "Unclassified / Intermediate": "#718096"
 }
 
 # ---------------------------------------------------------
@@ -531,17 +544,17 @@ sns.barplot(
     ax=ax
 )
 
-ax.set_title("Top 10 Offshore Basins by Emitter Proximity (Mtpa)", fontsize=14, fontweight='bold', pad=20, color='#1A365D')
+ax.set_title("Top 10 Offshore Basins by Emitter Proximity (Mtpa)", fontsize=14, fontweight='bold', pad=20, color='#86efac')
 ax.set_xlabel("Total Emitter Capacity Within 200 km (Mtpa CO2)", fontsize=11, fontweight='semibold', labelpad=10)
 ax.set_ylabel("Basin Name", fontsize=11, fontweight='semibold', labelpad=10)
 
 sns.despine(left=True, bottom=True)
-ax.xaxis.grid(True, linestyle='--', alpha=0.6)
+ax.xaxis.grid(True, linestyle='--', alpha=0.3)
 ax.yaxis.grid(False) 
 ax.legend(title="Tectonic Class", title_fontsize='10', loc="lower right", frameon=True)
 
 plt.tight_layout()
-plt.savefig(figures_dir / "top_basins_proximity_bar.png", bbox_inches='tight', dpi=300)
+plt.savefig(figures_dir / "top_basins_proximity_bar.png", bbox_inches='tight', dpi=300, transparent=False)
 plt.show()
 
 
@@ -560,18 +573,48 @@ sns.barplot(
     ax=ax2
 )
 
-ax2.set_title("Top 10 Offshore Basins by Physical Storage Capacity (P50 Gt)", fontsize=14, fontweight='bold', pad=20, color='#1A365D')
+ax2.set_title("Top 10 Offshore Basins by Physical Storage Capacity (P50 Gt)", fontsize=14, fontweight='bold', pad=20, color='#86efac')
 ax2.set_xlabel("P50 Storage Capacity (Gt CO2)", fontsize=11, fontweight='semibold', labelpad=10)
 ax2.set_ylabel("Basin Name", fontsize=11, fontweight='semibold', labelpad=10)
 
 sns.despine(left=True, bottom=True)
-ax2.xaxis.grid(True, linestyle='--', alpha=0.6)
+ax2.xaxis.grid(True, linestyle='--', alpha=0.3)
 ax2.yaxis.grid(False) 
 ax2.legend(title="Tectonic Class", title_fontsize='10', loc="lower right", frameon=True)
 
 plt.tight_layout()
-plt.savefig(figures_dir / "top_basins_storage_bar.png", bbox_inches='tight', dpi=300)
+plt.savefig(figures_dir / "top_basins_storage_bar.png", bbox_inches='tight', dpi=300, transparent=False)
 plt.show()
+
+
+# ---------------------------------------------------------
+# 3. HORIZONTAL BAR CHART: FINAL COST-EFFECTIVE RANKING
+# ---------------------------------------------------------
+if not top_3_basins.empty:
+    fig3, ax3 = plt.subplots(figsize=(10, 6), dpi=300)
+    
+    # Plot top 10 from the filtered 'elite' candidates
+    plot_df = df_scoring.sort_values(by="cost_effective_score", ascending=False).head(10).reset_index()
+    
+    sns.barplot(
+        x="cost_effective_score",
+        y="basin",
+        data=plot_df,
+        palette="viridis",
+        ax=ax3
+    )
+
+    ax3.set_title("Top Cost-Effective Basins (60% Proximity, 40% Volume)", fontsize=14, fontweight='bold', pad=20, color='#86efac')
+    ax3.set_xlabel("Cost-Effective Score (Normalized 0-1)", fontsize=11, fontweight='semibold', labelpad=10)
+    ax3.set_ylabel("Basin Name", fontsize=11, fontweight='semibold', labelpad=10)
+
+    sns.despine(left=True, bottom=True)
+    ax3.xaxis.grid(True, linestyle='--', alpha=0.3)
+    ax3.yaxis.grid(False)
+
+    plt.tight_layout()
+    plt.savefig(figures_dir / "top_basins_final_ranking.png", bbox_inches='tight', dpi=300, transparent=False)
+    plt.show()
 """)
 
 code(r"""
@@ -615,12 +658,14 @@ for basin_name, row in ranking_df.iterrows():
     score_text = f"Cost-Effective Score: {row['cost_effective_score']:.3f}<br>" if pd.notna(row['cost_effective_score']) else "Filtered out of Top 3 ranking.<br>"
     
     popup_html = (
-        f"<b>{basin_name}</b><br>"
+        f"<div style='font-family:sans-serif; min-width:160px;'>"
+        f"<b style='color:#0d1d1a; font-size:1.1em;'>{basin_name}</b><hr>"
         f"Status: {row['status']}<br>"
         f"Tectonic: {row['tectonic_class']}<br>"
-        f"Storage: {row['P50_Gt']:.2f} Gt<br>"
-        f"CO2 Reach: {row['total_capacity_within_radius_mtpa']:.2f} Mtpa<br>"
-        f"{score_text}"
+        f"Storage: <b>{row['P50_Gt']:.2f} Gt</b><br>"
+        f"CO2 Reach: <b>{row['total_capacity_within_radius_mtpa']:.2f} Mtpa</b><br>"
+        f"<p style='margin-top:8px; color:#2c3e50;'>{score_text}</p>"
+        f"</div>"
     )
     folium.CircleMarker(
         location=[row["lat"], row["lon"]], radius=radius_px, color=color, fill=True, fill_opacity=0.85,

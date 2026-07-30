@@ -21,10 +21,16 @@ openpyxl>=3.1          # Global Energy Monitor tracker .xlsx files (src/ingest_r
 # Visualisasi
 matplotlib>=3.8
 folium>=0.15
+seaborn>=0.13
 
 # Notebook
 jupyter>=1.0
 nbformat>=5.9
+
+# Custom web application
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.12
 
 # (opsional, hanya perlu kalau GEBCO didistribusikan sebagai GeoTIFF, bukan
 # NetCDF, dan untuk digitasi/GIS penuh di masa depan - lihat roadmap Phase 6-7)
